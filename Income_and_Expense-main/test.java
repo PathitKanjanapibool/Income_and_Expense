@@ -54,7 +54,7 @@ public class test {
         check("category = shrimp", t1.getCategory().equals("ข้าว"));
         check("amount = 150.50", t1.getAmount() == 150.50);
         check("description = shrimp", t1.getDescription().equals("shrimp"));
-        check("total_amount = 250.00", t1.getTotal_amount() == 250.00);
+        check("total_amount = 250.00", t1.total_amount() == 250.00);
     }
     
 }
