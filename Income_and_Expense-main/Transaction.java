@@ -12,12 +12,12 @@ public class Transaction {
     // Constructor สำหรับสร้างรายการใหม่
     public Transaction(String name, LocalDate date, TransactionType type, String category, double amount, String description,double total_amount) {
         this.name = name; //ชื่อรายการ
-        this.date = date; //วันที่ทำรายการ
-        this.type = type; //ประเภท(รายรับ/รายจ่าย)
-        this.category = category; //หมวดหมู่
-        this.amount = amount; //จำนวนเงิน
-        this.description = description; //คำอธิบาย
-        this.total_amount = total_amount; //จำนวนเงินคงเหลือทั้งหมด
+        this.date = date; 
+        this.type = type; 
+        this.category = category; 
+        this.amount = amount; 
+        this.description = description; 
+        this.total_amount = total_amount; 
 
     }
 
@@ -28,7 +28,7 @@ public class Transaction {
     public String getCategory() { return category; }
     public double getAmount() { return amount; }
     public String getDescription() { return description; }
-    public double getTotal_amount() {return total_amount;}
+    public double total_amount() {return total_amount;}
 
     // แปลง Object เป็นบรรทัด CSV
     public String toCsvRow() {
