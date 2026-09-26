@@ -1,5 +1,3 @@
-# Income_and_Expense
-
 ## รายชื่อสมาชิก
 
 จารุพัฒน์ การงาน 6821600945 test+backend helper
