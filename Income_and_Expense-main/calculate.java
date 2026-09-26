@@ -5,7 +5,7 @@ public class calculate {
     public double totalIncome(List<Transaction> transactions) {
         double total = 0;
         for (Transaction t : transactions) {
-            // ใช้ == เปรียบเทียบกับ Enum ได้เลย
+            // ใช้ == เปรียบเทียบกับ Enum 
             if (t.getType() == TransactionType.INCOME) {
                 total += t.getAmount();
             }
