@@ -1,10 +1,12 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.RoundRectangle2D;
 import javax.swing.*;
+
+
 public class App extends JFrame implements ActionListener{
     private int money = 0;
+    JPanel MenuBox;
     Container cp;
     RoundedBox box1; //กล่องใหญ่
     RoundedBox box2; //กล่องซ้าย
@@ -15,8 +17,7 @@ public class App extends JFrame implements ActionListener{
     String font = "Leelawadee UI";
     public App() {
         Initial();
-        setComponent1();
-        setComponent2();
+        page1();
         Finally();
     }
     public void Initial(){
@@ -24,29 +25,91 @@ public class App extends JFrame implements ActionListener{
         cp.setLayout(null);
         cp.setBackground(new Color(17,23,21));
     }
-    public void setComponent1(){
+
+    public void page1(){
+        setComponent1();
+        setComponent2();
+        setMenu();
+    }
+    public void setMenu(){
+        int x = 0; int y = 0;
+
+        JPanel Menu = new JPanel(null);
+        Menu.setBounds(x,y,200,960);
+        Menu.setBackground(new Color(17,23,21));
+        MenuBox = new JPanel();
+
+        // ImageIcon right_arrow = new ImageIcon("images/right_arrow.png");
+        // ImageIcon arrow_colored = UIUtils.tint(right_arrow, Color.white);
+        // Image scaled = arrow_colored.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+        // JLabel arrow = new JLabel(new ImageIcon(scaled), SwingConstants.CENTER);
+        // arrow.setBounds(145,440,60,60);
+        // Menu.add(arrow);
+
+        MenuBox.setLayout(new BoxLayout(MenuBox, BoxLayout.Y_AXIS));
+        MenuBox.setBorder(BorderFactory.createEmptyBorder(60,15,15,10));
         
+        ImageIcon homeIcon = new ImageIcon("images/home.png");
+        ImageIcon categoryIcon = new ImageIcon("images/category.png");
+        ImageIcon listIcon = new ImageIcon("images/list.png");
+        
+        addContent("หน้าแรก", homeIcon,true);
+        addContent("หมวดหมู่", categoryIcon,false);
+        addContent("รายการ", listIcon,false);
+        
+        MenuBox.setBackground(new Color(27, 34, 33));
+        MenuBox.setBounds(0, 0, 150, 960);
+
+        Menu.add(MenuBox);
+        cp.add(Menu);
+    }
+
+    public void addContent(String text,ImageIcon image,boolean first){
+        ImageIcon colored;
+        if(first)
+            colored = UIUtils.tint(image, new Color(0,221,143));
+        else
+            colored = UIUtils.tint(image, Color.WHITE);
+        Image scaled = colored.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+        JLabel label = new JLabel(text, new ImageIcon(scaled), SwingConstants.CENTER);
+        label.setFont(new Font(font, Font.BOLD, 32));
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        label.setHorizontalTextPosition(SwingConstants.CENTER);
+        label.setVerticalTextPosition(SwingConstants.BOTTOM);
+        if(first){
+            
+            label.setForeground(new Color(0,221,143));
+        }
+        else
+            label.setForeground(new Color(255,255,255));
+        label.setIconTextGap(-10);
+        MenuBox.add(label);
+        MenuBox.add(Box.createVerticalStrut(30));  
+    }
+
+    public void setComponent1(){
+        int x; int y;
         JLabel Head = new JLabel("บันทึกรายรับ-รายจ่าย");
         Head.setFont(new Font(font , Font.BOLD, 53));
         Head.setForeground(Color.white);
-        Head.setBounds(50, 45,600,100);
+        Head.setBounds(175, 45,600,100);
         cp.add(Head);
 
 
         box1 = new RoundedBox(30);
         box1.setBackground(new Color(27, 34, 33));
-        box1.setBounds(80, 172, 1281, 727);
+        box1.setBounds(200, 172, 1281, 727);
         box1.setLayout(null);
         cp.add(box1);
         
         box2 = new RoundedBox(50);
         box2.setBackground(new Color(17,23,21));
-        box2.setBounds(60, 180, 650, 525);
+        box2.setBounds(40, 180, 650, 525);
         box1.add(box2);
 
         box3 = new RoundedBox(50);
         box3.setBackground(new Color(17,23,21));
-        box3.setBounds(760, 50, 450, 655);
+        box3.setBounds(700, 50, 450, 655);
         box1.add(box3);
 
 
@@ -151,6 +214,7 @@ public class App extends JFrame implements ActionListener{
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   
     }
+
     public static void main(String[] args) {
         App app = new App();
     }
@@ -167,73 +231,3 @@ public class App extends JFrame implements ActionListener{
     }
 }
 
-class RoundedPainter { //ทำขอบมน
-    public static void paintRounded(Graphics g, int w, int h, int arc,
-                                     Color bgColor, Color borderColor, int borderThickness) {
-        Graphics2D g2 = (Graphics2D) g.create();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        g2.setColor(bgColor);
-        g2.fill(new RoundRectangle2D.Double(0, 0, w - 1, h - 1, arc, arc));
-
-        if (borderColor != null) {
-            g2.setColor(borderColor);
-            g2.setStroke(new BasicStroke(borderThickness));
-            g2.draw(new RoundRectangle2D.Double(1, 1, w - 3, h - 3, arc, arc));
-        }
-
-        g2.dispose();
-    }
-}
-
-
-class RoundedBox extends JComponent {
-    private int arc;
-
-    public RoundedBox(int arc) {
-        this.arc = arc;
-        setOpaque(false);
-    }
-
-    public void paintComponent(Graphics g) {
-        RoundedPainter.paintRounded(g, getWidth(), getHeight(), arc,
-            getBackground(), new Color(33, 35, 50), 3);
-    }
-
-}
-
-class RoundedToggleButton extends JToggleButton {
-    private int cornerRadius;
-
-    public RoundedToggleButton(int arc) {
-        this.cornerRadius = arc;
-        setContentAreaFilled(false);
-        setFocusPainted(false);
-        setBorderPainted(false);
-    }
-
-    public void paintComponent(Graphics g) {
-        RoundedPainter.paintRounded(g, getWidth(), getHeight(), cornerRadius,
-            getBackground(), null, 0);
-        super.paintComponent(g);
-    }
-}
-
-class RoundedButton extends JButton {
-    private int cornerRadius;
-
-    public RoundedButton(int arc) {
-        this.cornerRadius = arc;
-        
-        setContentAreaFilled(false);
-        setFocusPainted(false);
-        setBorderPainted(false);
-        
-    }
-
-    public void paintComponent(Graphics g) {
-        RoundedPainter.paintRounded(g, getWidth(), getHeight(), cornerRadius,
-            getBackground(), null, 0);
-        super.paintComponent(g);
-    }
-}
