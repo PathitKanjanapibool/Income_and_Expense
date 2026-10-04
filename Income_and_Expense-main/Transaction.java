@@ -1,6 +1,9 @@
 import java.time.LocalDate;
+import java.util.Objects;
+import java.util.UUID;
 
 public class Transaction {
+    private String id;
     private String name;
     private LocalDate date;
     private TransactionType type;        // "INCOME" หรือ "EXPENSE"
@@ -11,6 +14,18 @@ public class Transaction {
 
     // Constructor สำหรับสร้างรายการใหม่
     public Transaction(String name, LocalDate date, TransactionType type, String category, double amount, String description) {
+        this.id = UUID.randomUUID().toString();
+        this.name = name; //ชื่อรายการ
+        this.date = date;
+        this.type = type; 
+        this.category = category;
+        this.amount = amount;
+        this.description = description;
+
+    }
+
+     public Transaction(String id, String name, LocalDate date, TransactionType type, String category, double amount, String description) {
+        this.id = id;
         this.name = name; //ชื่อรายการ
         this.date = date;
         this.type = type; 
@@ -21,6 +36,7 @@ public class Transaction {
     }
 
     // Getters
+    public String getId() { return id; }
     public String getname() { return name; }
     public LocalDate getDate() { return date; }
     public TransactionType getType() { return type; }
@@ -31,19 +47,35 @@ public class Transaction {
 
     // แปลง Object เป็นบรรทัด CSV
     public String toCsvRow() {
-        return name + "," + date + "," + type + "," + category + "," + amount + "," + description;
+        return id + "," + name + "," + date + "," + type + "," + category + "," + amount + "," + description;
+    }
+
+    @Override
+    public int hashCode() {
+        // เมธอดนี้จะแปลงข้อมูล id และ name ให้กลายเป็นตัวเลข int (บวกหรือลบก็ได้) 
+        // หากข้อมูลข้างในเหมือนกัน จะได้ตัวเลขเดียวกันเสมอ
+        return Objects.hash(id, name);
+    }
+
+     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Transaction user = (Transaction) obj;
+        return Objects.equals(id, user.id) && Objects.equals(name, user.name);
     }
 
     // สร้าง Object จากบรรทัด CSV (Static Helper)
     public static Transaction fromCsvRow(String csvRow) {
         String[] data = csvRow.split(",");
-        String name = data[0];
-        LocalDate date = LocalDate.parse(data[1]);
-        TransactionType type = TransactionType.valueOf(data[2].toUpperCase());
-        String category = data[3];
-        double amount = Double.parseDouble(data[4]);
-        String description = data.length > 5 ? data[5] : "";
+        String id = data[0].trim();
+        String name = data[1];
+        LocalDate date = LocalDate.parse(data[2]);
+        TransactionType type = TransactionType.valueOf(data[3].toUpperCase());
+        String category = data[4];
+        double amount = Double.parseDouble(data[5]);
+        String description = data.length > 6 ? data[6] : "";
       
-        return new Transaction(name, date, type, category, amount, description );
+        return new Transaction(id, name, date, type, category, amount, description );
     }
 }
