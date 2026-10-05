@@ -22,7 +22,7 @@ public class App extends JFrame{
         contentArea.setOpaque(false);
         contentArea.add(new page1(), "HOME");
         contentArea.add(new page2(), "CATEGORY");
-        // contentArea.add(new page3(), "LIST");
+        contentArea.add(new page3(), "LIST");
 
         cp.add(new Menu(cardLayout, contentArea));
         cp.add(contentArea);

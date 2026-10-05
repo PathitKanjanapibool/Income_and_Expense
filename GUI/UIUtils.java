@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.*;
 
 public class UIUtils {
+
     //เปลี่ยนสีIcon
     public static ImageIcon tint(ImageIcon icon, Color color) {
     Image img = icon.getImage();
@@ -61,7 +62,7 @@ class RoundedPainter {
         g2.dispose();
     }
 }
-
+//ทำขอบกล่องมน
 class RoundedBox extends JComponent {
     private int arc;
 
@@ -76,29 +77,29 @@ class RoundedBox extends JComponent {
     }
 
 }
-
+//ทำขอบปุ่มกด Toggle มน
 class RoundedToggleButton extends JToggleButton {
-    private int cornerRadius;
+    private int arc;
 
     public RoundedToggleButton(int arc) {
-        this.cornerRadius = arc;
+        this.arc = arc;
         setContentAreaFilled(false);
         setFocusPainted(false);
         setBorderPainted(false);
     }
 
     public void paintComponent(Graphics g) {
-        RoundedPainter.paintRounded(g, getWidth(), getHeight(), cornerRadius,
+        RoundedPainter.paintRounded(g, getWidth(), getHeight(), arc,
             getBackground(), null, 0);
         super.paintComponent(g);
     }
 }
-
+//ทำปุ่มกดมน
 class RoundedButton extends JButton {
-    private int cornerRadius;
+    private int arc;
 
     public RoundedButton(int arc) {
-        this.cornerRadius = arc;
+        this.arc = arc;
         
         setContentAreaFilled(false);
         setFocusPainted(false);
@@ -107,7 +108,7 @@ class RoundedButton extends JButton {
     }
 
     public void paintComponent(Graphics g) {
-        RoundedPainter.paintRounded(g, getWidth(), getHeight(), cornerRadius,
+        RoundedPainter.paintRounded(g, getWidth(), getHeight(), arc,
             getBackground(), null, 0);
         super.paintComponent(g);
     }
