@@ -1,10 +1,11 @@
 package GUI;
-import System.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import javax.swing.*;
+
+import System.*;
 
 public class page1 extends JPanel implements ActionListener,KeyListener,FocusListener{
     private double money = 0;
@@ -27,6 +28,7 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
     JComboBox<String> cbb;
 
     RoundedButton roB1;
+    JButton bc;
 
     Transaction List;
     TransactionType Type;
@@ -142,9 +144,17 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
 
         //ใส่วันเดือนปี
         tf2 = new JTextField(LocalDate.now().format(f));
-        tf2.setBounds(350, 300, 250, 50);
+        tf2.setText("ยังไม่ได้เลือกวันที่");
+        tf2.setBounds(350, 300, 170, 50);
         tf2.setFont(new Font(font, Font.PLAIN, 24));
         box2.add(tf2);
+
+        bc = new JButton("+");
+        bc.setBounds(530, 300, 70, 50);
+        bc.setBackground(Color.WHITE);
+        bc.setFont(new Font(font, Font.BOLD, 36));
+        box2.add(bc);
+
 
         JLabel l5 = new JLabel("จำนวนเงิน");
         l5.setBounds(50, 360, 500, 50);
@@ -173,7 +183,7 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
         roB1.addActionListener(this);
         tf2.addKeyListener(this);
         tf3.addKeyListener(this);
-
+        bc.addActionListener(this);
         tf2.addFocusListener(this);
     }
     public void actionPerformed(ActionEvent e) {
@@ -202,7 +212,17 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
             csv.saveToCsv("data.csv", List);
         }
 
-
+        if (e.getSource() == bc) {
+            DatePicker picker = new DatePicker();
+            picker.openPicker(null); 
+        
+            String selectedDate = picker.getFormattedDate();
+        
+            // ถ้าผู้ใช้เลือกวันที่มา
+            if (!selectedDate.isEmpty()) {
+                tf2.setText(selectedDate);
+            }
+        }
     }
 
     public void keyTyped(KeyEvent e) {
