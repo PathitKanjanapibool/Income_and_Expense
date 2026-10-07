@@ -10,6 +10,8 @@ public class Menu extends JPanel {
     private final String font = "Leelawadee UI";
     private final String[] menuKeys  = {"HOME", "CATEGORY", "LIST"};
     private final String[] menuNames = {"หน้าแรก", "หมวดหมู่", "รายการ"};
+    private final int height = 960;
+    private final int width = 150;
 
     private JLabel[] menuLabels;
     private ImageIcon[] menuIcons;
@@ -23,7 +25,7 @@ public class Menu extends JPanel {
         this.contentArea = contentArea;
 
         this.setLayout(null);
-        this.setBounds(0, 0, 150, 960);
+        this.setBounds(0, 0, width, height);
         this.setOpaque(false);
         setMenu();
     }
@@ -83,4 +85,6 @@ public class Menu extends JPanel {
             menuLabels[i].setForeground(c);
         }
     }
+    public int getHeight() {int h = this.height; return  h;}
+    public int getWidth() {int w = this.width; return  w;}
 }

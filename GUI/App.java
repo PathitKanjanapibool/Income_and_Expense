@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class App extends JFrame{
     
-    String font = "Leelawadee UI";
+    public String font = "Leelawadee UI";
     int width = 1440; 
     int height = 960;
     Container cp;

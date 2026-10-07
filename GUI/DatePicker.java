@@ -95,7 +95,7 @@ public class DatePicker {
         if (day.equals("")) return "";
         Calendar cal = Calendar.getInstance();
         cal.set(year, month, Integer.parseInt(day));
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         return sdf.format(cal.getTime());
     }
 }

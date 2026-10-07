@@ -1,15 +1,14 @@
 package GUI;
+import System.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import javax.swing.*;
-
-import System.*;
+import javax.swing.border.Border;
 
 public class page1 extends JPanel implements ActionListener,KeyListener,FocusListener{
     private double money = 0;
-    private TransactionType type; 
 
     LocalDate date;
 
@@ -28,10 +27,10 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
     JComboBox<String> cbb;
 
     RoundedButton roB1;
+
     JButton bc;
 
     Transaction List;
-    TransactionType Type;
     Name csv;
 
     DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/uuuu");
@@ -42,6 +41,7 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
         setBounds(0, 0, 1440, 960);
         setComponent1();
         setComponent2();
+        setComponent3();
     }
 
     //องค์ประกอบภายนอก
@@ -65,10 +65,10 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
         box2.setBounds(40, 180, 650, 525);
         box1.add(box2);
 
-        box3 = new RoundedBox(50);
+        box3 = new RoundedBox(50);        
+        box3.setLayout((new BoxLayout(box3, BoxLayout.Y_AXIS)));
         box3.setBackground(setColor.BackgroundColor());
-        box3.setLayout(null);
-        box3.setBounds(700, 50, 450, 655);
+        box3.setBounds(710, 50, 450, 655);
         box1.add(box3);
 
         JLabel Money_left_text = new JLabel("ยอดเงินคงเหลือ");
@@ -77,7 +77,7 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
         Money_left_text.setBounds(40, 10,600,50);
         box1.add(Money_left_text);
 
-        JLabel Money_left = new JLabel("฿"+money);
+        JLabel Money_left = new JLabel("฿"+(int) money);
         Money_left.setFont(new Font(font , Font.BOLD, 65));
         Money_left.setForeground(Color.white);
         Money_left.setBounds(40, 70,600,65);
@@ -142,19 +142,17 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
         l4.setForeground(Color.WHITE);
         box2.add(l4);
 
-        //ใส่วันเดือนปี
-        tf2 = new JTextField(LocalDate.now().format(f));
-        tf2.setText("ยังไม่ได้เลือกวันที่");
-        tf2.setBounds(350, 300, 170, 50);
-        tf2.setFont(new Font(font, Font.PLAIN, 24));
-        box2.add(tf2);
-
         bc = new JButton("+");
         bc.setBounds(530, 300, 70, 50);
         bc.setBackground(Color.WHITE);
         bc.setFont(new Font(font, Font.BOLD, 36));
         box2.add(bc);
 
+        //ใส่วันเดือนปี
+        tf2 = new JTextField(LocalDate.now().format(f));
+        tf2.setBounds(350, 300, 180, 50);
+        tf2.setFont(new Font(font, Font.PLAIN, 24));
+        box2.add(tf2);
 
         JLabel l5 = new JLabel("จำนวนเงิน");
         l5.setBounds(50, 360, 500, 50);
@@ -178,13 +176,65 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
         box2.add(roB1);
 
 
+        // box2.setComponentZOrder(bc, 0);
+        // box2.setComponentZOrder(tf2, 1);
+
         button1.addActionListener(this);
         button2.addActionListener(this);
         roB1.addActionListener(this);
         tf2.addKeyListener(this);
         tf3.addKeyListener(this);
         bc.addActionListener(this);
+
         tf2.addFocusListener(this);
+    }
+
+    public void setComponent3() {
+    box3.setBorder(BorderFactory.createEmptyBorder(15, 25, 0, 0));
+    JLabel l = new JLabel("หมวดหมู่ที่ใช้จ่ายมากที่สุด");
+    l.setFont(new Font(font, Font.BOLD, 25));
+    l.setForeground(Color.white);
+    l.setAlignmentX(Component.LEFT_ALIGNMENT);           // ← เพิ่ม
+    box3.add(l);
+    box3.add(Box.createVerticalStrut(10));
+    box3.add(category_list("อาหาร", new Color(255, 155, 0), 60));
+    box3.add(category_list("เครื่องดื่ม", new Color(100, 200, 255), 40));
+}
+
+    public JComponent category_list(String s, Color c, int progress) {
+        int barWidth = 400;
+
+        JLabel l_1 = new JLabel(s);
+        l_1.setFont(new Font(font, Font.PLAIN, 20));
+        l_1.setForeground(Color.white);
+
+        JLabel l_2 = new JLabel(progress + "%");
+        l_2.setFont(new Font(font, Font.PLAIN, 20));
+        l_2.setForeground(Color.white);
+
+        RoundedBox b1 = new RoundedBox(25);
+        b1.setLayout(new BoxLayout(b1, BoxLayout.X_AXIS));
+        b1.setAlignmentX(Component.LEFT_ALIGNMENT);
+        b1.setMaximumSize(new Dimension(barWidth, 25));
+
+        RoundedBox b2 = new RoundedBox(25);
+        b2.setBackground(c);
+        b2.setMaximumSize(new Dimension(barWidth * progress / 100, 50));
+        b1.add(b2);
+
+        JPanel horizon = new JPanel(new BorderLayout());
+        horizon.setOpaque(false);
+        horizon.setAlignmentX(Component.LEFT_ALIGNMENT);
+        horizon.setMaximumSize(new Dimension(barWidth, 30));
+        horizon.add(l_1, BorderLayout.WEST);
+        horizon.add(l_2, BorderLayout.EAST);
+
+        Box group = Box.createVerticalBox();
+        group.setAlignmentX(Component.LEFT_ALIGNMENT); 
+        group.add(horizon);
+        group.add(Box.createVerticalStrut(5));
+        group.add(b1);
+        return group;
     }
     public void actionPerformed(ActionEvent e) {
         //เปลี่ยนสีรายรับให้สว่างขึ้้น รายจ่ายมืดลง
@@ -200,18 +250,6 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
             button1.setBackground(new Color(0,132,86));
         }
 
-        //บันทึกรายการไปยังไฟล์csv โดยเก็บ ชื่อรายการ ประเภทรายรับหรือรายจ่าย เวลา หมวดหมู่ จำนวนเงิน
-        if(e.getSource() == roB1){
-            LocalDate date = LocalDate.parse(tf2.getText().trim(), f);
-            if (button2.isSelected()) {
-                type = TransactionType.OUTCOME;
-            } else {
-                type = TransactionType.INCOME;
-            }
-            List = new Transaction(tf1.getText(),date,type,(String) cbb.getSelectedItem(),Double.parseDouble(tf3.getText()));
-            csv.saveToCsv("data.csv", List);
-        }
-
         if (e.getSource() == bc) {
             DatePicker picker = new DatePicker();
             picker.openPicker(null); 
@@ -223,9 +261,30 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
                 tf2.setText(selectedDate);
             }
         }
+
+        //บันทึกรายการไปยังไฟล์csv โดยเก็บ ชื่อรายการ ประเภทรายรับหรือรายจ่าย เวลา หมวดหมู่ จำนวนเงิน
+        if(e.getSource() == roB1){
+            String name = (tf1.getText().isBlank()) ? "-" : tf1.getText();
+            TransactionType type;
+            LocalDate date = LocalDate.parse(tf2.getText().trim(), f);
+            if (button2.isSelected()) {
+                type = TransactionType.OUTCOME;
+            } else {
+                type = TransactionType.INCOME;
+            }
+            Double amount = Double.parseDouble(tf3.getText());
+            List = new Transaction(name,date,type,(String) cbb.getSelectedItem(),amount);
+            csv.saveToCsv("data.csv", List);
+        }
+
+
     }
 
     public void keyTyped(KeyEvent e) {
+        if(e.getSource() == tf2){
+            if(e.getKeyChar() < '/' || e.getKeyChar() > '9')
+                e.consume();
+        }
         if(e.getSource() == tf3){
             if(e.getKeyChar() < '0' || e.getKeyChar() > '9')
                 e.consume();
