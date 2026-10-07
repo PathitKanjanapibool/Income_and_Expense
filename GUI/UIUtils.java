@@ -1,9 +1,13 @@
+package GUI;
+
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 
 public class UIUtils {
+
+    //เปลี่ยนสีIcon
     public static ImageIcon tint(ImageIcon icon, Color color) {
     Image img = icon.getImage();
     BufferedImage out = new BufferedImage(
@@ -20,7 +24,27 @@ public class UIUtils {
     }
 }
 
-class RoundedPainter { //ทำขอบมน
+//set สีที่ใช้ประจำ
+class setColor{
+    public static Color Green(){ //เขียนอ่อน
+        return new Color(0,221,143);
+    }
+
+    public static Color Red(){ //แดงสว่างอมส้มอ่อนๆ
+        return new Color(255,78,78);
+    }
+
+    public static Color BackgroundColor(){ //เขียวเข้มเกือบดำ
+        return new Color(17,23,21);
+    }
+
+    public static Color BoxColor() {
+        return new Color(27, 34, 33);
+    }
+}
+
+//ทำขอบมน
+class RoundedPainter {
     public static void paintRounded(Graphics g, int w, int h, int arc,
                                      Color bgColor, Color borderColor, int borderThickness) {
         Graphics2D g2 = (Graphics2D) g.create();
@@ -38,7 +62,7 @@ class RoundedPainter { //ทำขอบมน
         g2.dispose();
     }
 }
-
+//ทำขอบกล่องมน
 class RoundedBox extends JComponent {
     private int arc;
 
@@ -53,29 +77,29 @@ class RoundedBox extends JComponent {
     }
 
 }
-
+//ทำขอบปุ่มกด Toggle มน
 class RoundedToggleButton extends JToggleButton {
-    private int cornerRadius;
+    private int arc;
 
     public RoundedToggleButton(int arc) {
-        this.cornerRadius = arc;
+        this.arc = arc;
         setContentAreaFilled(false);
         setFocusPainted(false);
         setBorderPainted(false);
     }
 
     public void paintComponent(Graphics g) {
-        RoundedPainter.paintRounded(g, getWidth(), getHeight(), cornerRadius,
+        RoundedPainter.paintRounded(g, getWidth(), getHeight(), arc,
             getBackground(), null, 0);
         super.paintComponent(g);
     }
 }
-
+//ทำปุ่มกดมน
 class RoundedButton extends JButton {
-    private int cornerRadius;
+    private int arc;
 
     public RoundedButton(int arc) {
-        this.cornerRadius = arc;
+        this.arc = arc;
         
         setContentAreaFilled(false);
         setFocusPainted(false);
@@ -84,7 +108,7 @@ class RoundedButton extends JButton {
     }
 
     public void paintComponent(Graphics g) {
-        RoundedPainter.paintRounded(g, getWidth(), getHeight(), cornerRadius,
+        RoundedPainter.paintRounded(g, getWidth(), getHeight(), arc,
             getBackground(), null, 0);
         super.paintComponent(g);
     }
