@@ -32,6 +32,38 @@ public class page3 extends JPanel{
     }
     public void TableList(){
         Menu m = new Menu(null, null);
+
+        JPanel filter = new JPanel();
+        filter.setBounds((750/2)-m.getWidth(), 150, 750, 50);
+        filter.setLayout(new BoxLayout(filter,BoxLayout.X_AXIS));
+
+        JComboBox<String> typeBox = new JComboBox<>();
+        typeBox.setFont(new Font(font, Font.BOLD, 16));
+        typeBox.setPreferredSize(new Dimension(100,50));
+        typeBox.addItem("ทั้งหมด");
+        typeBox.addItem("รายรับ");
+        typeBox.addItem("รายจ่าย");
+        typeBox.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JComboBox<String> categoryBox = new JComboBox<>(new String[]{"ทุกหมวดหมู่"});
+        categoryBox.setFont(new Font(font, Font.BOLD, 16));
+        categoryBox.setPreferredSize(new Dimension(100,50));
+
+        JComboBox<String> monthBox = new JComboBox<>(new String[]{"ทุกเดือน"});
+        monthBox.setFont(new Font(font, Font.BOLD, 16));
+        monthBox.setPreferredSize(new Dimension(100,50));
+
+        JButton resetButton = new JButton("ล้างตัวกรอง");
+        resetButton.setFont(new Font(font, Font.BOLD, 16));
+        resetButton.setPreferredSize(new Dimension(100,50));
+
+
+        filter.add(typeBox);
+        filter.add(categoryBox);
+        filter.add(monthBox);
+        filter.add(resetButton);
+        add(filter);
+    
         int height = 655;
         int width = 750;
         table Table = new table();

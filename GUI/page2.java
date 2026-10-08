@@ -49,4 +49,3 @@ public class page2 extends JPanel{
         add(scDisplayCategory);
     }
 }
-
