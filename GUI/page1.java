@@ -33,7 +33,7 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
     Transaction List;
     Name csv;
 
-    DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+    DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public page1() {
         setLayout(null);

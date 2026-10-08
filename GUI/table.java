@@ -18,6 +18,8 @@ public class table extends JPanel{
         Table = new DefaultTableModel(columns,0);
 
         jt = new JTable(Table);
+        jt.setEnabled(false);
+        jt.setOpaque(false);
         jt.getTableHeader().setFont(new Font(font, Font.BOLD, 20));
         jt.setFont(new Font(font, Font.BOLD, 15));
         jt.setAutoCreateRowSorter(true);
