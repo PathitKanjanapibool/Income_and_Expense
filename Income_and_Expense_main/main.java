@@ -25,11 +25,23 @@ public class main {
         Name l = new Name(n.logIn(t2));
         // l.saveToCsv(t1);
         // l.editCsv("9fefebd4-ed9a-4841-8af3-78c3dca5249d", t1);
-        l.deleteByIndex("9fefebd4-ed9a-4841-8af3-78c3dca5249d");
+        //l.deleteByIndex("9fefebd4-ed9a-4841-8af3-78c3dca5249d");
         
         //n.logIn(t2);
 
         //Name.deleteByIndex("data.csv",1);
+
+    List<Transaction> a = l.filter("transactions.csv", 2026, 10, null, null);
+
+    // แสดงรายการ
+    for (Transaction t : a) {
+        System.out.println(t.toCsvRow());
+    }
+
+    //  รวมยอด
+    double total = a.stream().mapToDouble(Transaction::getAmount).sum();
+    System.out.println("รวม: " + total);
+}
     }
     
-}
+

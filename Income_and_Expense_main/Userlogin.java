@@ -24,9 +24,9 @@ public class Userlogin {
             String line;
             while ((line = br.readLine()) != null) {
                 //if (line.trim().isEmpty()) continue;
-                String[] parts = line.split(",");
-                if (parts[0].equals(username)) {
-                    return parts;
+                String[] user = line.split(",");
+                if (user[0].equals(username)) {
+                    return user;
                 }
             }
         } catch (IOException e) {
