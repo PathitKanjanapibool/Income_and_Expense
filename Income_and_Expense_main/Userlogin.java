@@ -35,7 +35,7 @@ public class Userlogin {
         return null;
     }
 
-    public String SignIn(UserAcc id) {
+    public void SignIn(UserAcc id) {
 
          String username =id.getUser();
          String password =id.getPW();
@@ -63,11 +63,12 @@ public class Userlogin {
             System.out.println(e);
         }
 
-        String currentUser = id.getUser();
-            return makeUserFlie.getUserFileName(currentUser);
+             makeUserFlie.getUserFileName(id);
+             makeUserFlie.getUserFileCat(id);
+    
    }
 
-   public String logIn(UserAcc id) {
+   public void logIn(UserAcc id) {
 
          String username =id.getUser();
          String password =id.getPW();
@@ -82,9 +83,9 @@ public class Userlogin {
             throw new IllegalArgumentException("ไม่มีไฟล์อยู่");
         }
 
-        String currentUser = id.getUser();
-       return makeUserFlie.getUserFileName(currentUser);
-        
+
+        makeUserFlie.getUserFileName(id);
+        makeUserFlie.getUserFileCat(id);
 
    }
 

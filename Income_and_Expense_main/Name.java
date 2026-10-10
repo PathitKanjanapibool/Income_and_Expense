@@ -131,4 +131,10 @@ public class Name {
             .collect(Collectors.toList());
     
 }
+    public void addCatagory(Transaction catagory){
+        saveToCsv(catagory);
+    }
+
+    
+
 }
