@@ -1,15 +1,18 @@
 package GUI;
-import System.*;
+import Income_and_Expense_main.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
-import javax.swing.border.Border;
 
 public class page1 extends JPanel implements ActionListener,KeyListener,FocusListener{
-    private double money = 0;
-
+    private double money;
+    Double amount;
+    String name;
     LocalDate date;
 
     String font = "Leelawadee UI";
@@ -30,8 +33,13 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
 
     JButton bc;
 
-    Transaction List;
+    Timer timer;
+
+    calculate cal = new calculate();
+    List<Transaction> money_remain = new ArrayList<>();
+    Transaction IE_list;
     Name csv;
+    TransactionType type;
 
     DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -71,13 +79,13 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
         box3.setBounds(710, 50, 450, 655);
         box1.add(box3);
 
-        JLabel Money_left_text = new JLabel("ยอดเงินคงเหลือ");
+        JLabel Money_left_text = new JLabel("ยอดเงินคงเหลือ"); 
         Money_left_text.setFont(new Font(font , Font.BOLD, 32));
         Money_left_text.setForeground(Color.white);
         Money_left_text.setBounds(40, 10,600,50);
         box1.add(Money_left_text);
 
-        JLabel Money_left = new JLabel("฿"+(int) money);
+        JLabel Money_left = new JLabel("฿"+getMoney());
         Money_left.setFont(new Font(font , Font.BOLD, 65));
         Money_left.setForeground(Color.white);
         Money_left.setBounds(40, 70,600,65);
@@ -86,6 +94,8 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
     }
     //องค์ประกอบภายในกล่องฝั่งซ้าย
     public void setComponent2(){
+
+        
 
         //ปุ่มรายสลับรับ
         button1 = new RoundedToggleButton(75);
@@ -187,6 +197,8 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
         bc.addActionListener(this);
 
         tf2.addFocusListener(this);
+
+        tf1.addKeyListener(this);
     }
 
     public void setComponent3() {
@@ -236,7 +248,9 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
         group.add(b1);
         return group;
     }
-    public void actionPerformed(ActionEvent e) {
+
+    public void actionPerformed(ActionEvent e) {        
+
         //เปลี่ยนสีรายรับให้สว่างขึ้้น รายจ่ายมืดลง
         if(e.getSource() == button1){
             button1.setBackground(setColor.Green());
@@ -264,20 +278,73 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
 
         //บันทึกรายการไปยังไฟล์csv โดยเก็บ ชื่อรายการ ประเภทรายรับหรือรายจ่าย เวลา หมวดหมู่ จำนวนเงิน
         if(e.getSource() == roB1){
-            String name = (tf1.getText().isBlank()) ? "-" : tf1.getText();
-            TransactionType type;
-            LocalDate date = LocalDate.parse(tf2.getText().trim(), f);
-            if (button2.isSelected()) {
-                type = TransactionType.OUTCOME;
-            } else {
-                type = TransactionType.INCOME;
-            }
-            Double amount = Double.parseDouble(tf3.getText());
-            List = new Transaction(name,date,type,(String) cbb.getSelectedItem(),amount);
-            csv.saveToCsv("data.csv", List);
+            if (check()){
+                String category = cbb.getSelectedItem().toString();
+                if (button2.isSelected()) {
+                    type = TransactionType.OUTCOME;
+                } else {
+                    type = TransactionType.INCOME;
+                }
+                Double amount = Double.parseDouble(tf3.getText());
+                IE_list = new Transaction(name,date,type,category,amount);
+                csv = new Name("data.csv");
+                csv.saveToCsv(IE_list);
+            };
         }
 
 
+    }
+
+    public boolean check() {
+        try{
+           name = tf1.getText();
+            for (int i = 0; i < name.length(); i++) {
+                char c = name.charAt(i);
+                if (!(c == ' '
+                || (c >= '0' && c <= '9')
+                || (c >= 'a' && c <= 'z')
+                || (c >= 'A' && c <= 'Z')))
+                throw new IllegalArgumentException();
+    }
+            name = (tf1.getText().isBlank()) ? "-" : tf1.getText();
+
+            } catch(IllegalArgumentException ex){
+            time_messege(tf1, "ห้ามใส่ตัวอักษรพิเศษ", "", 2);
+            return false;
+        }
+        try {
+            date = LocalDate.parse(tf2.getText().trim(), f);
+            } catch (DateTimeParseException ex) {
+                time_messege(tf2, "วันที่ไม่ถูกต้อง", LocalDate.now().format(f), 1);
+                return false;
+        }
+
+        try {
+            amount = Double.parseDouble(tf3.getText().trim());
+            if (amount < 0) throw new IllegalArgumentException();
+            } catch (Exception ex) {
+                time_messege(tf3, "ใส่ตัวเลขให้ถูกต้อง", "", 2);
+                return false;
+        }
+
+        return true;
+}
+
+    public void money_cal(){
+        money = cal.totalMoney(money_remain);
+    }
+
+    public double getMoney(){
+        return money;
+    }
+
+    public void time_messege(JTextField Cm,String Text, String newText,int second){
+        Cm.setText(Text);
+        timer = new Timer(second*1000, ev ->{
+            Cm.setText(newText);
+        });
+        timer.setRepeats(false);
+        timer.start();
     }
 
     public void keyTyped(KeyEvent e) {
@@ -289,7 +356,17 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
             if(e.getKeyChar() < '0' || e.getKeyChar() > '9')
                 e.consume();
         }
+
+        if (e.getSource() == tf1) {
+            char c = e.getKeyChar();
+            if (!(c == ' '
+            || (c >= '0' && c <= '9')
+            || (c >= 'a' && c <= 'z')
+            || (c >= 'A' && c <= 'Z')))
+                e.consume();
+        }
     }
+
 
     public void keyPressed(KeyEvent e) {
     }

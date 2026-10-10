@@ -4,15 +4,15 @@ import java.time.LocalDate;
 
 import javax.swing.*;
 
-import System.TransactionType;
+import Income_and_Expense_main.TransactionType;
 
 public class page3 extends JPanel{
-    int height = getHeight();
-    int width = getWidth();
-    String font = "Leelawadee UI";
-    RoundedBox box1; //กล่องใหญ่
-    RoundedBox box2; //กล่องซ้าย
-    RoundedBox box3; //กล่องขวา
+    private String font = "Leelawadee UI";
+    int a_height = App.height;
+    int a_width = App.width;
+
+    int m_height = Menu.height;
+    int m_width = Menu.width;
 
     RoundedToggleButton button1; 
     RoundedToggleButton button2;
@@ -20,6 +20,7 @@ public class page3 extends JPanel{
     public page3(){
         this.setLayout(null);
         this.setOpaque(false);
+        Filter();
         setComponent1();
         TableList();
     }
@@ -30,15 +31,18 @@ public class page3 extends JPanel{
         Head.setBounds(100, 45,600,100);
         add(Head);
     }
-    public void TableList(){
-        Menu m = new Menu(null, null);
 
+    public void Filter(){
         JPanel filter = new JPanel();
-        filter.setBounds((750/2)-m.getWidth(), 150, 750, 50);
+        filter.setBounds((750/2)-m_width, 150, 750, 50);
+        filter.setBackground(setColor.BackgroundColor());
+        filter.setFocusable(false);
         filter.setLayout(new BoxLayout(filter,BoxLayout.X_AXIS));
 
         JComboBox<String> typeBox = new JComboBox<>();
         typeBox.setFont(new Font(font, Font.BOLD, 16));
+        typeBox.setBackground(setColor.BoxColor2());
+        typeBox.setForeground(Color.white);
         typeBox.setPreferredSize(new Dimension(100,50));
         typeBox.addItem("ทั้งหมด");
         typeBox.addItem("รายรับ");
@@ -47,32 +51,46 @@ public class page3 extends JPanel{
 
         JComboBox<String> categoryBox = new JComboBox<>(new String[]{"ทุกหมวดหมู่"});
         categoryBox.setFont(new Font(font, Font.BOLD, 16));
+        categoryBox.setBackground(setColor.BoxColor2());
+        categoryBox.setForeground(Color.white);
         categoryBox.setPreferredSize(new Dimension(100,50));
 
         JComboBox<String> monthBox = new JComboBox<>(new String[]{"ทุกเดือน"});
         monthBox.setFont(new Font(font, Font.BOLD, 16));
+        monthBox.setBackground(setColor.BoxColor2());
+        monthBox.setForeground(Color.white);
         monthBox.setPreferredSize(new Dimension(100,50));
 
         JButton resetButton = new JButton("ล้างตัวกรอง");
         resetButton.setFont(new Font(font, Font.BOLD, 16));
+        resetButton.setBackground(setColor.BoxColor2());
+        resetButton.setForeground(Color.white);
         resetButton.setPreferredSize(new Dimension(100,50));
 
 
         filter.add(typeBox);
+        filter.add(Box.createHorizontalStrut(15));
         filter.add(categoryBox);
+        filter.add(Box.createHorizontalStrut(15));
         filter.add(monthBox);
+        filter.add(Box.createHorizontalStrut(15));
         filter.add(resetButton);
         add(filter);
-    
-        int height = 655;
-        int width = 750;
+    }
+
+    public void TableList(){
+        int table_height = 550;
+        int table_width = 1050;
+
         table Table = new table();
+        Table.setBackground(setColor.BackgroundColor());
         Table.addRow("นํ้าปั่น",LocalDate.now(),TransactionType.OUTCOME,"เครื่องดื่ม",100);
         Table.addRow("ข้าวมันไก่",LocalDate.now(),TransactionType.OUTCOME,"อาหาร",100);
         Table.addRow("ขนม",LocalDate.now(),TransactionType.OUTCOME,"อาหาร",50);
         Table.addRow("-",LocalDate.now(),TransactionType.INCOME,"เงินเดือน",15000);
         Table.setBackground(setColor.BackgroundColor());
-        Table.setBounds((width/2)-m.getWidth(), 250, width, height);
+        Table.setBounds((a_width-m_width)/2-(table_width/2), 250, table_width, table_height);
         add(Table);
+        System.out.println(getWidth());
     }
 }
