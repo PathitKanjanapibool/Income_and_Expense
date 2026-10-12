@@ -3,6 +3,8 @@ package GUI;
 import java.awt.*;
 import javax.swing.*;
 
+import GUIUtils.setColor;
+
 public class logsign extends JFrame {
     String font = "Leelawadee UI";
     Container cp;
@@ -42,9 +44,5 @@ public class logsign extends JFrame {
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   
-    }
-
-    public static void main(String[] args) {
-        logsign lg = new logsign();
     }
 }

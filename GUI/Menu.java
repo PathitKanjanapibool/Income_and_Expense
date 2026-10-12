@@ -4,18 +4,22 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 
+import GUIUtils.*;
+import GUIUtils.Icon;
+
 //หน้าเมนูฝั่งซ้าย
 
 public class Menu extends JPanel {
     private final String font = "Leelawadee UI";
     private final String[] menuKeys  = {"HOME", "CATEGORY", "LIST"};
     private final String[] menuNames = {"หน้าแรก", "หมวดหมู่", "รายการ"};
-    private final int height = 960;
-    private final int width = 150;
+    public static final int height = 960;
+    public static final int width = 150;
 
     private JLabel[] menuLabels;
     private ImageIcon[] menuIcons;
     private JPanel MenuBox;
+    private Icon image;
 
     private CardLayout cardLayout;
     private JPanel contentArea;
@@ -79,12 +83,10 @@ public class Menu extends JPanel {
     private void setActiveMenu(int active) {
         for (int i = 0; i < menuLabels.length; i++) {
             Color c = (i == active) ? setColor.Green() : Color.WHITE;
-            Image scaled = UIUtils.tint(menuIcons[i], c).getImage()
+            Image scaled = image.tint(menuIcons[i], c).getImage()
                                   .getScaledInstance(60, 60, Image.SCALE_SMOOTH);
             menuLabels[i].setIcon(new ImageIcon(scaled));
             menuLabels[i].setForeground(c);
         }
     }
-    public int getHeight() {int h = this.height; return  h;}
-    public int getWidth() {int w = this.width; return  w;}
 }

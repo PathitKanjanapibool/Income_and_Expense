@@ -1,4 +1,4 @@
-package GUI;
+package GUIUtils;
 import java.awt.*;
 import java.util.Calendar;
 import javax.swing.*;

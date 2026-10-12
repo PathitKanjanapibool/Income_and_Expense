@@ -2,6 +2,10 @@ package GUI;
 
 import java.awt.*;
 import javax.swing.*;
+
+import GUIUtils.RoundedButton;
+import GUIUtils.Icon;
+
 import java.awt.event.*;
 
 public class loginP extends JPanel{

@@ -2,6 +2,11 @@ package GUI;
 import java.awt.*;
 import javax.swing.*;
 
+import GUIUtils.RoundedButton;
+import GUIUtils.RoundedToggleButton;
+import GUIUtils.setColor;
+import GUIUtils.table;
+
 public class page2 extends JPanel{
     private int money = 0;
 
@@ -36,7 +41,7 @@ public class page2 extends JPanel{
         saveCate = new RoundedButton(30);
         saveCate.setText("เพิ่มหมวดหมู่");
         saveCate.setFont(new Font(font, Font.BOLD, 36));
-        saveCate.setBackground(Color.GREEN);
+        saveCate.setBackground(setColor.Green());
         saveCate.setForeground(Color.BLACK);
         saveCate.setBounds(323, 300, 645, 70);
         add(saveCate);

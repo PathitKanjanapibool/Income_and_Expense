@@ -1,5 +1,5 @@
-package GUI;
-import System.*;
+package GUIUtils;
+import Income_and_Expense_main.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;

@@ -6,44 +6,54 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.swing.*;
+
+import GUIUtils.*;
 
 public class page1 extends JPanel implements ActionListener,KeyListener,FocusListener{
     private double money;
-    Double amount;
-    String name;
-    LocalDate date;
+    private Double amount_input;
+    private String name;
+    private categoryColor_read catColor = new categoryColor_read();
+    private LocalDate date;
 
-    String font = "Leelawadee UI";
-    RoundedBox box1; //กล่องใหญ่
-    RoundedBox box2; //กล่องซ้าย
-    RoundedBox box3; //กล่องขวา
+    private String font = "Leelawadee UI";
+    private RoundedBox box1; //กล่องใหญ่
+    private RoundedBox box2; //กล่องซ้าย
+    private RoundedBox box3; //กล่องขวา
 
-    RoundedToggleButton button1; 
-    RoundedToggleButton button2;
+    private RoundedToggleButton button1; 
+    private RoundedToggleButton button2;
 
-    JTextField tf1;
-    JTextField tf2;
-    JTextField tf3;
+    private JLabel Money_left;
 
-    JComboBox<String> cbb;
+    private JTextField tf1;
+    private JTextField tf2;
+    private JTextField tf3;
 
-    RoundedButton roB1;
+    private JComboBox<String> cbb;
 
-    JButton bc;
+    private RoundedButton roB1;
 
-    Timer timer;
+    private JButton bc;
 
-    calculate cal = new calculate();
-    List<Transaction> money_remain = new ArrayList<>();
-    Transaction IE_list;
-    Name csv;
-    TransactionType type;
+    private Timer timer;
 
-    DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private calculate cal = new calculate();
+    private List<Transaction> money_remain;
+    private Transaction IE_list;
+    private Name csv = new Name("data.csv");
+    private TransactionType type;
+
+    private DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public page1() {
+        money_cal();
         setLayout(null);
         setOpaque(false);
         setBounds(0, 0, 1440, 960);
@@ -85,7 +95,7 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
         Money_left_text.setBounds(40, 10,600,50);
         box1.add(Money_left_text);
 
-        JLabel Money_left = new JLabel("฿"+getMoney());
+        Money_left = new JLabel(String.format("฿%,.2f", money));
         Money_left.setFont(new Font(font , Font.BOLD, 65));
         Money_left.setForeground(Color.white);
         Money_left.setBounds(40, 70,600,65);
@@ -140,8 +150,8 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
 
         //เลือกหมวดหมู่
         cbb = new JComboBox<>();
-        cbb.addItem("ComboBox1");
-        cbb.addItem("ComboBox2");
+        cbb.addItem("อาหาร");
+        cbb.addItem("เครื่องดื่ม");
         cbb.setBounds(50, 300, 250, 50);
         cbb.setFont(new Font(font, Font.PLAIN, 24));
         box2.add(cbb);
@@ -206,49 +216,36 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
     JLabel l = new JLabel("หมวดหมู่ที่ใช้จ่ายมากที่สุด");
     l.setFont(new Font(font, Font.BOLD, 25));
     l.setForeground(Color.white);
-    l.setAlignmentX(Component.LEFT_ALIGNMENT);           // ← เพิ่ม
+    l.setAlignmentX(Component.LEFT_ALIGNMENT);
     box3.add(l);
     box3.add(Box.createVerticalStrut(10));
-    box3.add(category_list("อาหาร", new Color(255, 155, 0), 60));
-    box3.add(category_list("เครื่องดื่ม", new Color(100, 200, 255), 40));
-}
+    
+    Map<String, Double> sum = new HashMap<>();
+    
+    for (Transaction t : money_remain) {
+        if (t.getType() == TransactionType.OUTCOME) {
+            String cat = t.getCategory();
 
-    public JComponent category_list(String s, Color c, int progress) {
-        int barWidth = 400;
-
-        JLabel l_1 = new JLabel(s);
-        l_1.setFont(new Font(font, Font.PLAIN, 20));
-        l_1.setForeground(Color.white);
-
-        JLabel l_2 = new JLabel(progress + "%");
-        l_2.setFont(new Font(font, Font.PLAIN, 20));
-        l_2.setForeground(Color.white);
-
-        RoundedBox b1 = new RoundedBox(25);
-        b1.setLayout(new BoxLayout(b1, BoxLayout.X_AXIS));
-        b1.setAlignmentX(Component.LEFT_ALIGNMENT);
-        b1.setMaximumSize(new Dimension(barWidth, 25));
-
-        RoundedBox b2 = new RoundedBox(25);
-        b2.setBackground(c);
-        b2.setMaximumSize(new Dimension(barWidth * progress / 100, 50));
-        b1.add(b2);
-
-        JPanel horizon = new JPanel(new BorderLayout());
-        horizon.setOpaque(false);
-        horizon.setAlignmentX(Component.LEFT_ALIGNMENT);
-        horizon.setMaximumSize(new Dimension(barWidth, 30));
-        horizon.add(l_1, BorderLayout.WEST);
-        horizon.add(l_2, BorderLayout.EAST);
-
-        Box group = Box.createVerticalBox();
-        group.setAlignmentX(Component.LEFT_ALIGNMENT); 
-        group.add(horizon);
-        group.add(Box.createVerticalStrut(5));
-        group.add(b1);
-        return group;
+            if (sum.containsKey(cat)) {
+                sum.put(cat, sum.get(cat) + t.getAmount());
+            } else {
+                sum.put(cat, t.getAmount());
+            }
+        }
     }
+    if (sum.isEmpty()) return;
+    List<Map.Entry<String, Double>> entries = new ArrayList<>(sum.entrySet());
+    entries.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+    double max = entries.get(0).getValue();
+    double total = cal.totalOutcome(money_remain);
 
+    for (Map.Entry<String, Double> e : entries) {
+        String cat = e.getKey();
+        double amount = e.getValue();
+        int progress = (int) (amount / total * 100);
+        box3.add(new category_list(cat, catColor.getColor(cat), progress));
+    }
+}
     public void actionPerformed(ActionEvent e) {        
 
         //เปลี่ยนสีรายรับให้สว่างขึ้้น รายจ่ายมืดลง
@@ -287,8 +284,15 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
                 }
                 Double amount = Double.parseDouble(tf3.getText());
                 IE_list = new Transaction(name,date,type,category,amount);
-                csv = new Name("data.csv");
                 csv.saveToCsv(IE_list);
+                money_cal();
+                Money_left.setText(String.format("฿%,.2f", money));
+                box1.repaint();
+                box3.removeAll();     
+                setComponent3();
+                box3.revalidate();
+                box3.repaint();   
+                
             };
         }
 
@@ -300,10 +304,7 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
            name = tf1.getText();
             for (int i = 0; i < name.length(); i++) {
                 char c = name.charAt(i);
-                if (!(c == ' '
-                || (c >= '0' && c <= '9')
-                || (c >= 'a' && c <= 'z')
-                || (c >= 'A' && c <= 'Z')))
+                if ((c == ','))
                 throw new IllegalArgumentException();
     }
             name = (tf1.getText().isBlank()) ? "-" : tf1.getText();
@@ -320,8 +321,8 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
         }
 
         try {
-            amount = Double.parseDouble(tf3.getText().trim());
-            if (amount < 0) throw new IllegalArgumentException();
+            amount_input = Double.parseDouble(tf3.getText().trim());
+            if (amount_input < 0) throw new IllegalArgumentException();
             } catch (Exception ex) {
                 time_messege(tf3, "ใส่ตัวเลขให้ถูกต้อง", "", 2);
                 return false;
@@ -330,7 +331,8 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
         return true;
 }
 
-    public void money_cal(){
+    private void money_cal(){
+        money_remain = new ArrayList<>(csv.loadToMap("data.csv").values());
         money = cal.totalMoney(money_remain);
     }
 
@@ -359,10 +361,7 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
 
         if (e.getSource() == tf1) {
             char c = e.getKeyChar();
-            if (!(c == ' '
-            || (c >= '0' && c <= '9')
-            || (c >= 'a' && c <= 'z')
-            || (c >= 'A' && c <= 'Z')))
+            if ((c == ','))
                 e.consume();
         }
     }
