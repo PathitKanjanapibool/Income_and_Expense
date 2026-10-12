@@ -2,23 +2,26 @@ package GUI;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.text.Utilities;
+
+import GUIUtils.*;
 
 public class App extends JFrame{
     
     public String font = "Leelawadee UI";
-    int width = 1440; 
-    int height = 960;
+    public static final int width = 1440; 
+    public static final int height = 960;
+    int menu_width = Menu.width;
     Container cp;
 
     CardLayout cardLayout;
     JPanel contentArea;  
-
-    RoundedToggleButton button1; RoundedToggleButton button2;
+    setColor setColor;
     public App() {
         Initial();
         cardLayout = new CardLayout();
         contentArea = new JPanel(cardLayout);
-        contentArea.setBounds(150, 0, 1290, 960);
+        contentArea.setBounds(menu_width, 0, width-menu_width, height);
         contentArea.setOpaque(false);
         contentArea.add(new page1(), "HOME");
         contentArea.add(new page2(), "CATEGORY");

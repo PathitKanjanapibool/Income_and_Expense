@@ -4,6 +4,9 @@ import java.time.LocalDate;
 
 import javax.swing.*;
 
+import GUIUtils.RoundedToggleButton;
+import GUIUtils.setColor;
+import GUIUtils.table;
 import Income_and_Expense_main.TransactionType;
 
 public class page3 extends JPanel{
