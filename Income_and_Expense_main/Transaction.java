@@ -64,7 +64,11 @@ public class Transaction {
 
     // สร้าง Object จากบรรทัด CSV (Static Helper)
     public static Transaction fromCsvRow(String csvRow) {
+        
         String[] data = csvRow.split(",");
+        if (data.length < 4) { 
+        return null; // ข้ามบรรทัดที่มีข้อมูลไม่ครบ
+    }
         String id = data[0].trim();
         String name = data[1];
         LocalDate date = LocalDate.parse(data[2]);
