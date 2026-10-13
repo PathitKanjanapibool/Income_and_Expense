@@ -14,6 +14,9 @@ import java.util.Map;
 import javax.swing.*;
 
 public class page1 extends JPanel implements ActionListener,KeyListener,FocusListener{
+
+    private final String filepath;
+
     private double money;
     private Double amount_input;
     private String name;
@@ -42,15 +45,23 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
 
     private Timer timer;
 
-    private calculate cal = new calculate();
+    private String currentFile; 
+    private calculate cal;
     private List<Transaction> money_remain;
     private Transaction IE_list;
-    private Name csv = new Name("data.csv");
+    private Name csv;
     private TransactionType type;
 
     private DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    public page1() {
+    public page1(String filepath) {
+
+        this.filepath = filepath;
+
+        this.currentFile = (filepath != null && !filepath.isEmpty()) ? filepath : "data.csv";
+        this.cal = new calculate(currentFile);
+        this.csv = new Name(currentFile);
+
         money_cal();
         setLayout(null);
         setOpaque(false);
@@ -222,6 +233,7 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
     Map<String, Double> sum = new HashMap<>();
     
     for (Transaction t : money_remain) {
+        if (t == null) {continue;}
         if (t.getType() == TransactionType.OUTCOME) {
             String cat = t.getCategory();
 
@@ -333,9 +345,11 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
 }
 
     private void money_cal(){
-        money_remain = new ArrayList<>(csv.loadToMap("data.csv").values());
+        money_remain = new ArrayList<>(csv.loadToMap(filepath).values());
         money = cal.totalMoney(money_remain);
     }
+
+    
 
     public double getMoney(){
         return money;

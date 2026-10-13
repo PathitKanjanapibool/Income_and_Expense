@@ -7,6 +7,11 @@ import java.util.Map;
 public class main {
 
     public static void main(String[] args) {
+
+        System.setProperty("sun.java2d.uiScale", "0.85");
+        new logsign();
+
+        /*
         // สมมติชื่อผู้ใช้ที่กำลังล็อกอินหรือใช้งานอยู่
         //String currentUser = "john_doe";
 
@@ -59,8 +64,8 @@ System.out.println(k.perCent(TransactionType.OUTCOME));
     // double total = a.stream().mapToDouble(Transaction::getAmount).sum();
     // System.out.println("รวม: " + total);
 
-}
+}*/
 
-    }
+    }}
     
 

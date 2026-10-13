@@ -10,7 +10,7 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.List; 
 import java.util.Locale;
 import java.util.Set;
 import javax.swing.*;
@@ -143,7 +143,7 @@ public class page3 extends JPanel implements ActionListener{
         Table.setBackground(setColor.BackgroundColor());
         Table.setBounds((a_width-m_width)/2-(table_width/2), 250, table_width, table_height);
         add(Table);
-        System.out.println(getWidth());
+        //System.out.println(getWidth());
     }
     private List<Transaction> getCategory_List(){
         return category_list = new ArrayList<>(csv.loadToMap("data.csv").values());

@@ -4,11 +4,12 @@ import java.awt.*;
 import javax.swing.*;
 
 import GUIUtils.RoundedButton;
+import Income_and_Expense_main.*;
 import GUIUtils.Icon;
 
 import java.awt.event.*;
 
-public class loginP extends JPanel{
+public class loginP extends JPanel implements ActionListener{
     String font = "Leelawadee UI";
     JTextField uSernmaetf;
     JPasswordField passWordF;
@@ -58,6 +59,11 @@ public class loginP extends JPanel{
         uSernmaetf.setFont(new Font(font, Font.BOLD, 24));
         add(uSernmaetf);
 
+        // passWordF = new JPasswordField();
+        // passWordF.setBounds(390,340, 500, 40);
+        // passWordF.setFont(new Font(font, Font.BOLD, 24));
+        // add(passWordF);
+
         passWordF = new JPasswordField();
         passWordF.setBounds(390,340, 500, 40);
         passWordF.setFont(new Font(font, Font.BOLD, 24));
@@ -70,6 +76,8 @@ public class loginP extends JPanel{
         loginButton.setFont(new Font(font, Font.BOLD, 24));
         loginButton.setBounds(530, 410, 250, 40);
         add(loginButton);
+
+        loginButton.addActionListener(this);
 
         JLabel descriptionOR = new JLabel("--------------------Or--------------------");
         descriptionOR.setFont(new Font(font, Font.BOLD, 24));
@@ -93,5 +101,42 @@ public class loginP extends JPanel{
             }
         });
     }
-    
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == loginButton) {
+            String username = uSernmaetf.getText().trim();
+            String password = passWordF.getText().trim();
+
+            try {
+                UserAcc acc = new UserAcc(username, password);
+                Userlogin loginService = new Userlogin("data.csv");
+                
+                loginService.logIn(acc);
+
+                String userFilePath = makeUserFlie.getUserFileName(acc);
+                JOptionPane.showMessageDialog(
+                    this,
+                    "login leaw!",
+                    "sum reid",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+
+                new App(userFilePath); 
+
+                Window window = SwingUtilities.getWindowAncestor(this);
+                if (window instanceof JFrame) {
+                    ((JFrame) window).dispose();
+                }
+
+            } catch (Exception ex) {
+                System.out.println(ex);
+                JOptionPane.showMessageDialog(
+                    this,
+                    "เกิดข้อผิดพลาด: " + ex.getMessage(),
+                    "ล็อกอินไม่สำเร็จ",
+                    JOptionPane.ERROR_MESSAGE
+                );
+            }
+        }
+    }
 }

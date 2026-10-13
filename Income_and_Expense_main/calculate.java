@@ -18,6 +18,7 @@ public class calculate {
 
 
     public double totalIncome(List<Transaction> transactions) {
+        if (transactions == null) {return 0.00;}
         double total = 0;
         for (Transaction t : transactions) {
             // ใช้ == เปรียบเทียบกับ Enum 
@@ -29,6 +30,7 @@ public class calculate {
     }
 
     public double totalOutcome(List<Transaction> transactions) {
+        if (transactions == null) {return 0.00;}
         double total = 0;
         for (Transaction t : transactions) {
             if (t.getType() == TransactionType.OUTCOME) {
@@ -39,6 +41,7 @@ public class calculate {
     }
 
     public double totalMoney(List<Transaction> transactions) {
+        if (transactions == null) {return 0.00;}
         return totalIncome(transactions) - totalOutcome(transactions);
     }
 
