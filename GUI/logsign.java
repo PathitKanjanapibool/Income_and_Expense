@@ -4,6 +4,7 @@ import java.awt.*;
 import javax.swing.*;
 
 import GUIUtils.setColor;
+import Income_and_Expense_main.main;
 
 public class logsign extends JFrame {
     String font = "Leelawadee UI";
@@ -44,5 +45,10 @@ public class logsign extends JFrame {
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   
+    }
+
+    public static void main(String[] args) {
+        System.setProperty("sun.java2d.uiScale", "0.85");
+        logsign lg = new logsign();
     }
 }

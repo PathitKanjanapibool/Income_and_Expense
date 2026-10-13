@@ -4,11 +4,13 @@ import java.awt.*;
 import javax.swing.*;
 
 import GUIUtils.RoundedButton;
+import Income_and_Expense_main.UserAcc;
+import Income_and_Expense_main.Userlogin;
 import GUIUtils.Icon;
 
 import java.awt.event.*;
 
-public class loginP extends JPanel{
+public class loginP extends JPanel implements ActionListener{
     String font = "Leelawadee UI";
     JTextField uSernmaetf;
     JPasswordField passWordF;
@@ -83,6 +85,8 @@ public class loginP extends JPanel{
         SignButton.setBounds(530, 520, 250, 40);
         add(SignButton);
 
+        loginButton.addActionListener(this);
+
         SignButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -94,4 +98,47 @@ public class loginP extends JPanel{
         });
     }
     
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // เมื่อกดปุ่ม Log in
+        if (e.getSource() == loginButton) {
+            String username = uSernmaetf.getText().trim();
+            String password = passWordF.getText().trim();
+
+            try {
+                UserAcc acc = new UserAcc(username, password);
+                Userlogin loginService = new Userlogin("data.csv");
+                
+                // ตรวจสอบเงื่อนไขการ Log in
+                loginService.logIn(acc);
+
+                JOptionPane.showMessageDialog(
+                    this,
+                    "เข้าสู่ระบบสำเร็จ!",
+                    "สำเร็จ",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+
+                
+
+                // เปิดหน้า App หลักและปิดหน้า Login เดิม
+                App p = new App();
+                p.setVisible(true);
+
+                Window window = SwingUtilities.getWindowAncestor(this);
+                if (window != null) {
+                    window.dispose();
+                }
+
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(
+                    this,
+                    ex.getMessage(),
+                    "เข้าสู่ระบบไม่สำเร็จ",
+                    JOptionPane.ERROR_MESSAGE
+                );
+            
+            }
+        }
+    }
 }

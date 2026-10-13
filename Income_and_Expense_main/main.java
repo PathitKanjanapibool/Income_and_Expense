@@ -14,7 +14,8 @@ public class main {
 
         Transaction t1 = new Transaction("9fefebd4-ed9a-4841-8af3-78c3dca5249d","หนังสือ", LocalDate.now(), TransactionType.OUTCOME, "Food", 15.0);
         String g = t1.getCategory();
-        UserAcc t2 = new UserAcc("phrom", "p1234");
+        UserAcc t2 = new UserAcc("phrom2", "p1234");
+
         
         
         //Name.saveToCsv(userFile, t1);

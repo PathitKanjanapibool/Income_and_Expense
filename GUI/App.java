@@ -2,11 +2,9 @@ package GUI;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.text.Utilities;
-
 import GUIUtils.*;
 
-public class App extends JFrame{
+public class App extends JFrame {
     
     public String font = "Leelawadee UI";
     public static final int width = 1440; 
@@ -17,20 +15,25 @@ public class App extends JFrame{
     CardLayout cardLayout;
     JPanel contentArea;  
     setColor setColor;
-    public App() {
+
+    // รับ userFile เข้ามาจากหน้า Login
+    public App(String userFile) {
         Initial();
         cardLayout = new CardLayout();
         contentArea = new JPanel(cardLayout);
-        contentArea.setBounds(menu_width, 0, width-menu_width, height);
+        contentArea.setBounds(menu_width, 0, width - menu_width, height);
         contentArea.setOpaque(false);
-        contentArea.add(new page1(), "HOME");
-        contentArea.add(new page2(), "CATEGORY");
+
+        // ส่ง userFile ให้กับ page1
+        contentArea.add(new page1(userFile), "HOME");
+        contentArea.add(new page2(), "CATEGORY"); // ถ้า page2/page3 ต้องใช้ ก็ส่ง userFile เข้าไปแบบเดียวกันได้ครับ
         contentArea.add(new page3(), "LIST");
 
         cp.add(new Menu(cardLayout, contentArea));
         cp.add(contentArea);
         Finally();
     }
+
     public void Initial(){
         cp = this.getContentPane();
         cp.setLayout(null);
@@ -44,4 +47,3 @@ public class App extends JFrame{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   
     }
 }
-

@@ -44,13 +44,31 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
 
     private Timer timer;
 
-    private calculate cal = new calculate();
+    private String filePath;
+
+    private calculate cal = new calculate("");
     private List<Transaction> money_remain;
     private Transaction IE_list;
     private Name csv = new Name("data.csv");
     private TransactionType type;
 
+    
+
     private DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+    public page1(String filePath) {
+        this.filePath = filePath;
+        this.csv = new Name(filePath); // ใช้งาน Name ตามไฟล์ของผู้ใช้คนนั้น
+        this.cal = new calculate(filePath); // ใช้งาน calculate ตามไฟล์ของผู้ใช้คนนั้น
+        
+        money_cal();
+        setLayout(null);
+        setOpaque(false);
+        setBounds(0, 0, 1440, 960);
+        setComponent1();
+        setComponent2();
+        setComponent3();
+    }
 
     public page1() {
         money_cal();
@@ -332,7 +350,7 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
 }
 
     private void money_cal(){
-        money_remain = new ArrayList<>(csv.loadToMap("data.csv").values());
+        money_remain = new ArrayList<>(csv.loadToMap(filePath).values());
         money = cal.totalMoney(money_remain);
     }
 

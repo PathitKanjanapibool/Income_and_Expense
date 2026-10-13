@@ -65,22 +65,23 @@ public class Name {
         Map<String, Transaction> map = new HashMap<>();
         File file = new File(filePath);
 
-        if (!file.exists()) {
+        // เช็คว่าถ้าไม่มีไฟล์ หรือไฟล์ขนาดเป็น 0 ให้คืนค่า map เปล่ากลับไปทันที
+        if (!file.exists() || file.length() == 0) {
             return map;
         }
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
-            //boolean isHeader = true;
 
-             while ((line = br.readLine()) != null) {
-            //     if (isHeader) { // ข้ามบรรทัด Header
-            //         isHeader = false;
-            //         continue;
-            //     }
+            while ((line = br.readLine()) != null) {
+                // เช็คว่าบรรทัดต้องไม่เป็นช่องว่าง
                 if (!line.trim().isEmpty()) {
                     Transaction t = Transaction.fromCsvRow(line);
-                    map.put(t.getId(), t); // ใส่ลง HashMap โดยใช้ ID เป็น Key
+                    
+                    // *** แก้จุดนี้: เพิ่มการเช็ค t != null ก่อนดึง getId() ***
+                    if (t != null && t.getId() != null) {
+                        map.put(t.getId(), t);
+                    }
                 }
             }
         } catch (IOException e) {
