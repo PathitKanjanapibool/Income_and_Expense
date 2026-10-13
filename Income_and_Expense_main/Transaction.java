@@ -23,7 +23,7 @@ public class Transaction {
 
     }
 
-     public Transaction(String id, String name, LocalDate date, TransactionType type, String category, double amount) {
+    public Transaction(String id, String name, LocalDate date, TransactionType type, String category, double amount) {
         this.id = id;
         this.name = name; //ชื่อรายการ
         this.date = date;
@@ -40,6 +40,9 @@ public class Transaction {
     public TransactionType getType() { return type; }
     public String getCategory() { return category; }
     public double getAmount() { return amount; }
+    public int getYear() {return date.getYear();}
+    public int getMonth() {return date.getMonthValue();}
+    public int getDay() {return date.getDayOfMonth();}
     
 
     // แปลง Object เป็นบรรทัด CSV
@@ -63,19 +66,27 @@ public class Transaction {
     }
 
     // สร้าง Object จากบรรทัด CSV (Static Helper)
-    public static Transaction fromCsvRow(String csvRow) {
+    public static Transaction fromCsvRow(String line) {
+        if (line == null || line.trim().isEmpty()) {
+            return null;
+        }
         
-        String[] data = csvRow.split(",");
-        if (data.length < 4) { 
-        return null; // ข้ามบรรทัดที่มีข้อมูลไม่ครบ
-    }
-        String id = data[0].trim();
-        String name = data[1];
-        LocalDate date = LocalDate.parse(data[2]);
-        TransactionType type = TransactionType.valueOf(data[3].toUpperCase());
-        String category = data[4];
-        double amount = Double.parseDouble(data[5]);
-      
-        return new Transaction(id, name, date, type, category, amount );
+        String[] data = line.split(",");
+        if (data.length < 6) {
+            return null; // คอลัมน์ไม่ครบให้ส่ง null
+        }
+
+        try {
+            String id = data[0].trim();
+            String name = data[1].trim();
+            LocalDate date = LocalDate.parse(data[2].trim());
+            TransactionType type = TransactionType.valueOf(data[3].trim());
+            String category = data[4].trim();
+            double amount = Double.parseDouble(data[5].trim());
+
+            return new Transaction(id, name, date, type, category, amount);
+        } catch (Exception e) {
+            return null; // ถ้าเป็นบรรทัด Header หรือแปลงค่าไม่ผ่าน ให้ส่ง null
+        }
     }
 }

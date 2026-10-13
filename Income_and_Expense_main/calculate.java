@@ -97,9 +97,6 @@ public Map<String, Double> perCent(TransactionType type) {
 }
 
 
-
-
-
  public Map<String, Transaction> loadToMap(String filePath) {
         Map<String, Transaction> map = new HashMap<>();
         File file = new File(filePath);
