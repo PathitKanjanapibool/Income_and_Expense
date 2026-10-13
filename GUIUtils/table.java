@@ -1,11 +1,11 @@
 package GUIUtils;
-import Income_and_Expense_main.*;
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.LocalDate;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class table extends JPanel{
+    
     private final DefaultTableModel Table;
     private final JTable jt;
 
@@ -25,7 +25,10 @@ public class table extends JPanel{
         jt.setAutoCreateRowSorter(true);
         add(new JScrollPane(jt),BorderLayout.CENTER);
     }
-    public void addRow(String name, LocalDate date, TransactionType type, String category, double amount){
+    public void addRow(String name, LocalDate date, String type, String category, double amount){
         Table.addRow(new Object[]{name, date, type, category, amount});
     }
+    public void clearRows(){
+    Table.setRowCount(0);
+}
 }

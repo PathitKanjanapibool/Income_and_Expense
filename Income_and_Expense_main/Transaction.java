@@ -78,4 +78,7 @@ public class Transaction {
       
         return new Transaction(id, name, date, type, category, amount );
     }
+    public int getYear() {return date.getYear();}
+    public int getMonth() {return date.getMonthValue();}
+    public int getDay() {return date.getDayOfMonth();}
 }
