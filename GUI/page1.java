@@ -1,4 +1,5 @@
 package GUI;
+import GUIUtils.*;
 import Income_and_Expense_main.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -10,10 +11,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.*;
-
-import GUIUtils.*;
 
 public class page1 extends JPanel implements ActionListener,KeyListener,FocusListener{
     private double money;
@@ -152,6 +150,7 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
         cbb = new JComboBox<>();
         cbb.addItem("อาหาร");
         cbb.addItem("เครื่องดื่ม");
+        cbb.addItem("เงินเดือน");
         cbb.setBounds(50, 300, 250, 50);
         cbb.setFont(new Font(font, Font.PLAIN, 24));
         box2.add(cbb);
@@ -285,13 +284,15 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
                 Double amount = Double.parseDouble(tf3.getText());
                 IE_list = new Transaction(name,date,type,category,amount);
                 csv.saveToCsv(IE_list);
+                tf1.setText("");
+                tf3.setText("");
                 money_cal();
                 Money_left.setText(String.format("฿%,.2f", money));
                 box1.repaint();
                 box3.removeAll();     
                 setComponent3();
                 box3.revalidate();
-                box3.repaint();   
+                box3.repaint();
                 
             };
         }
@@ -384,4 +385,3 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
         if(tf2.getText().isEmpty()) tf2.setText(LocalDate.now().format(f));
     }
 }
-

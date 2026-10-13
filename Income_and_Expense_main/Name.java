@@ -1,10 +1,12 @@
 package Income_and_Expense_main;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.*;
 
 public class Name {
 
@@ -69,7 +71,7 @@ public class Name {
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
-            boolean isHeader = true;
+            //boolean isHeader = true;
 
              while ((line = br.readLine()) != null) {
             //     if (isHeader) { // ข้ามบรรทัด Header
@@ -117,4 +119,16 @@ public class Name {
         // Step 3: แปลง HashMap ทั้งหมดกลับลง CSV
         saveMapToCsv( map);
     }
+
+    public List<Transaction> filter(String filePath,Integer year, Integer month, String category, TransactionType type) {
+                            
+    return  loadToMap(filePath).values().stream()
+            .filter(t -> year == null || t.getDate().getYear() == year)
+            .filter(t -> month == null || t.getDate().getMonthValue() == month)
+            .filter(t -> category == null || t.getCategory().equalsIgnoreCase(category))
+            .filter(t -> type == null || t.getType() == type)
+            .sorted(Comparator.comparing(Transaction::getDate))   // เรียงตามวันที่
+            .collect(Collectors.toList());
+    
+}
 }

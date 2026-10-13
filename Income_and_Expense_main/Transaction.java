@@ -10,18 +10,16 @@ public class Transaction {
     private TransactionType type;        // "INCOME" หรือ "EXPENSE"
     private String category;    // เช่น "Food", "Transport"
     private double amount;
-    private String description;
     private double total_amount;
 
     // Constructor สำหรับสร้างรายการใหม่
-    public Transaction(String name, LocalDate date, TransactionType type, String category, double amount, String description) {
+    public Transaction(String name, LocalDate date, TransactionType type, String category, double amount) {
         this.id = UUID.randomUUID().toString();
         this.name = name; //ชื่อรายการ
         this.date = date;
         this.type = type; 
         this.category = category;
         this.amount = amount;
-        this.description = description;
 
     }
 
@@ -76,4 +74,7 @@ public class Transaction {
       
         return new Transaction(id, name, date, type, category, amount );
     }
+    public int getYear() {return date.getYear();}
+    public int getMonth() {return date.getMonthValue();}
+    public int getDay() {return date.getDayOfMonth();}
 }
