@@ -51,20 +51,25 @@ public class Userlogin {
         }
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(filePath,true));
-            String line = String.join(",",
-                    id.getUser(),
-                    id.getPW()
-            );
-            bw.write(line);
-            bw.newLine();
+            bw.write(id.getUser() + "," + id.getPW());
             bw.close();
             
         } catch (Exception e) {
             System.out.println(e);
         }
+ 
+        File file_user = new File (makeUserFlie.getUserFileName(id));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_user))) {
+    } catch (IOException e) {
+        System.out.println(e);
+    }       
 
-             makeUserFlie.getUserFileName(id);
-             makeUserFlie.getUserFileCat(id);
+    File file_cat = new File (makeUserFlie.getUserFileCat(id));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_cat))) {
+    } catch (IOException e) {
+        System.out.println(e);
+    }
+            
     
    }
 
@@ -82,10 +87,24 @@ public class Userlogin {
         if (findUser(username) == null) {
             throw new IllegalArgumentException("ไม่มีไฟล์อยู่");
         }
+         String storedPassword = findUser(username)[1].trim();
+        if (!storedPassword.equals(password)) {
+            throw new IllegalArgumentException("Password ไม่ถูกต้อง");
+        }
 
-
-        makeUserFlie.getUserFileName(id);
-        makeUserFlie.getUserFileCat(id);
+        File file_user = new File (makeUserFlie.getUserFileName(id));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_user))) {
+      
+    } catch (IOException e) {
+        System.out.println(e);
+    }
+        File file_cat = new File (makeUserFlie.getUserFileCat(id));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_cat))) {
+        
+    } catch (IOException e) {
+        System.out.println(e);
+    }
+        
 
    }
 

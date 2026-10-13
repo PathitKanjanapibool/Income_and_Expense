@@ -42,24 +42,60 @@ public class calculate {
         return totalIncome(transactions) - totalOutcome(transactions);
     }
 
-    public Map<String, Double> getTotalCat() {
-    Map<String, Double> categoryTotals = new HashMap<>();
-    Map<String, Transaction> transactions = loadToMap(filePath);
-    double sum = 0.0;
+    public Map<String, Double> sumCategory(TransactionType type) {
+    Map<String, Double> result = new HashMap<>();
 
-    for (Transaction t : transactions.values()) {
-
-        String cat = t.getCategory();
-        double amount = t.getAmount();
-        sum += amount;
-
-
-        // เอาค่าเดิมมาบวกเพิ่ม (ถ้ายังไม่มีจะเป็น 0.0)
-        categoryTotals.put(cat, sum);
+    for (Transaction t : loadToMap(filePath).values()) {
+        if (t.getType() == type) {
+            result.merge(t.getCategory(), t.getAmount(), Double::sum);
+        }
     }
+    return result;
+} 
 
-    return categoryTotals;
+public Map<String, Double> totalCategory() {
+    Map<String, Double> income = sumCategory(TransactionType.INCOME);
+    Map<String, Double> outcome = sumCategory(TransactionType.OUTCOME);
+
+    Map<String, Double> net = new HashMap<>(income);   // เริ่มจากรายรับ
+
+    for (Map.Entry<String, Double> e : outcome.entrySet()) {
+        net.merge(e.getKey(), -e.getValue(), Double::sum);   // ลบรายจ่ายทีละ category
+    }
+    return net;
 }
+
+public Map<String, Double> maxByCategory(TransactionType type) {
+    Map<String, Double> result = new HashMap<>();
+
+    for (Transaction t : loadToMap(filePath).values()) {
+        if (t.getType() == type) {
+            result.merge(t.getCategory(), t.getAmount(), Math::max);
+        }
+    }
+    return result;
+}
+
+public Map<String, Double> perCent(TransactionType type) {
+    Map<String, Double> max = maxByCategory(type);
+    Map<String, Double> total = totalCategory(); 
+    Map<String, Double> result = new HashMap<>();
+
+    for (Map.Entry<String, Double> e : max.entrySet()) {
+         Double t = total.get(e.getKey()); 
+        if (type == TransactionType.OUTCOME) {
+            if(t<0){
+                t = -t;
+            double per =  e.getValue() / t * 100;
+            per = Math.round(per * 100.0) / 100.0;
+            result.put(e.getKey(),per);
+            
+            }
+        }
+    }
+    return result;
+}
+
 
  public Map<String, Transaction> loadToMap(String filePath) {
         Map<String, Transaction> map = new HashMap<>();
@@ -77,7 +113,7 @@ public class calculate {
             
                 if (!line.trim().isEmpty()) {
                     Transaction t = Transaction.fromCsvRow(line);
-                    
+
                     if (t != null) {
                     map.put(t.getId(), t);  }// ใส่ลง HashMap โดยใช้ ID เป็น Key
                 }
