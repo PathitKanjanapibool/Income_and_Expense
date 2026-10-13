@@ -7,6 +7,8 @@ import javax.swing.text.Utilities;
 import GUIUtils.*;
 
 public class App extends JFrame{
+
+    private final String filepath;
     
     public String font = "Leelawadee UI";
     public static final int width = 1440; 
@@ -17,13 +19,16 @@ public class App extends JFrame{
     CardLayout cardLayout;
     JPanel contentArea;  
     setColor setColor;
-    public App() {
+    public App(String filepath) {
+
+        this.filepath = filepath;
+
         Initial();
         cardLayout = new CardLayout();
         contentArea = new JPanel(cardLayout);
         contentArea.setBounds(menu_width, 0, width-menu_width, height);
         contentArea.setOpaque(false);
-        contentArea.add(new page1(), "HOME");
+        contentArea.add(new page1(filepath), "HOME");
         contentArea.add(new page2(), "CATEGORY");
         contentArea.add(new page3(), "LIST");
 

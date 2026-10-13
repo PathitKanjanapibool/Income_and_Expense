@@ -57,7 +57,7 @@ public class Name {
         throw new IllegalArgumentException("ไม่พบรายการที่จะลบ");
     }
 
-        map.remove(uuid);                 // ลบด้วย key
+        map.remove(uuid);// ลบด้วย key
         saveMapToCsv(map); 
     }
 
@@ -80,7 +80,10 @@ public class Name {
             //     }
                 if (!line.trim().isEmpty()) {
                     Transaction t = Transaction.fromCsvRow(line);
-                    map.put(t.getId(), t); // ใส่ลง HashMap โดยใช้ ID เป็น Key
+                    if (t != null) {
+                    map.put(t.getId(), t); // ใส่ลง HashMap โดยใช้ ID เป็น Key    
+                    }
+                    
                 }
             }
         } catch (IOException e) {
