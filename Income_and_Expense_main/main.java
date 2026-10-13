@@ -15,13 +15,15 @@ public class main {
 
         Transaction t1 = new Transaction("9fefebd4-ed9a-4841-8af3-78c3dca5249d","หนังสือ", LocalDate.now(), TransactionType.OUTCOME, "Food", 15.0);
         String g = t1.getCategory();
-        UserAcc t2 = new UserAcc("phrom", "p1234");
+        UserAcc t2 = new UserAcc("guin", "p1234");
         
         
         //Name.saveToCsv(userFile, t1);
         //System.out.println(t1.getId());
        
         Userlogin n = new Userlogin("data.csv");
+        n.logIn(t2);
+        
         makeUserFlie make = new makeUserFlie();
         String m = makeUserFlie.getUserFileName(t2);
         String mc = makeUserFlie.getUserFileCat(t2);
@@ -32,12 +34,12 @@ public class main {
 System.out.println(k.maxByCategory(TransactionType.OUTCOME));
 System.out.println(k.perCent(TransactionType.OUTCOME));
         // l.updateTransaction("9fefebd4-ed9a-4841-8af3-78c3dca5249d",  t1);
-        n.SignIn(t2);
-        //n.logIn(t2);
+        //n.SignIn(t2);
+        
         Name l = new Name(m);
         category c = new category(mc);
         //l.loadToMap(m);
-        //l.saveToCsv(t1);
+        l.saveToCsv(t1);
         // c.saveToCsv("food");
         // l.editCsv("9fefebd4-ed9a-4841-8af3-78c3dca5249d", t1);
         //l.deleteByIndex("9fefebd4-ed9a-4841-8af3-78c3dca5249d");
