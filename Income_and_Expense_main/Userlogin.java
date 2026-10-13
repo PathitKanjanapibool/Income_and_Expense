@@ -63,8 +63,18 @@ public class Userlogin {
             System.out.println(e);
         }
  
-             makeUserFlie.getUserFileName(id);
-             makeUserFlie.getUserFileCat(id);
+             File file_user = new File (makeUserFlie.getUserFileName(id));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_user))) {
+    } catch (IOException e) {
+        System.out.println(e);
+    }       
+
+    File file_cat = new File (makeUserFlie.getUserFileCat(id));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_cat))) {
+    } catch (IOException e) {
+        System.out.println(e);
+    }
+            
     
    }
 
@@ -83,9 +93,21 @@ public class Userlogin {
             throw new IllegalArgumentException("ไม่มีไฟล์อยู่");
         }
 
-
-        makeUserFlie.getUserFileName(id);
-        makeUserFlie.getUserFileCat(id);
+        File file_user = new File (makeUserFlie.getUserFileName(id));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_user))) {
+        bw.write("List");
+        bw.newLine();
+    } catch (IOException e) {
+        System.out.println(e);
+    }
+        File file_cat = new File (makeUserFlie.getUserFileCat(id));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_cat))) {
+        //bw.write();
+        bw.newLine();
+    } catch (IOException e) {
+        System.out.println(e);
+    }
+        
 
    }
 
