@@ -34,14 +34,23 @@ public class page3 extends JPanel implements ActionListener{
     int y1 = LocalDate.now().getYear();
     YearMonth now = YearMonth.now();
 
+    private int table_width = 1050;
+    private int table_height = 550;
+
+    private int filter_size_width = 198; 
+    private int filter_size_height = 50;
+
     int a_height = App.height;
     int a_width = App.width;
 
     int m_height = Menu.height;
     int m_width = Menu.width;
 
+    private final page1 p1;
 
-    public page3(String filepath){
+
+    public page3(page1 p1,String filepath){
+        this.p1 = p1;
         this.filepath = filepath;
         csv = new Name(filepath);
         data = new ArrayList<>(csv.loadToMap(filepath).values());
@@ -63,7 +72,7 @@ public class page3 extends JPanel implements ActionListener{
 
     public void Filter(){
         JPanel filter = new JPanel();
-        filter.setBounds((750/2)-m_width, 150, 750, 50);
+        filter.setBounds((a_width - m_width)/2 - table_width/2, 175, 1050, 50);
         filter.setBackground(setColor.BackgroundColor());
         filter.setFocusable(false);
         filter.setLayout(new BoxLayout(filter,BoxLayout.X_AXIS));
@@ -72,7 +81,7 @@ public class page3 extends JPanel implements ActionListener{
         typeBox.setFont(new Font(font, Font.BOLD, 16));
         typeBox.setBackground(setColor.BoxColor2());
         typeBox.setForeground(Color.white);
-        typeBox.setPreferredSize(new Dimension(100,50));
+        setSize(typeBox,filter_size_width,filter_size_height);
         typeBox.addItem("รายรับ");
         typeBox.addItem("รายจ่าย");
         typeBox.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -81,7 +90,7 @@ public class page3 extends JPanel implements ActionListener{
         categoryBox.setFont(new Font(font, Font.BOLD, 16));
         categoryBox.setBackground(setColor.BoxColor2());
         categoryBox.setForeground(Color.white);
-        categoryBox.setPreferredSize(new Dimension(100,50));
+        setSize(categoryBox,filter_size_width,filter_size_height);
         Set<String> category= new HashSet<>();
         for (Transaction c : data) {
             category.add(c.getCategory());
@@ -94,7 +103,7 @@ public class page3 extends JPanel implements ActionListener{
         yearBox.setFont(new Font(font, Font.BOLD, 16));
         yearBox.setBackground(setColor.BoxColor2());
         yearBox.setForeground(Color.white);
-        yearBox.setPreferredSize(new Dimension(100,50));
+        setSize(yearBox,filter_size_width,filter_size_height);
 
         
         Set<String> year = new HashSet<>();
@@ -109,7 +118,7 @@ public class page3 extends JPanel implements ActionListener{
         monthBox.setFont(new Font(font, Font.BOLD, 16));
         monthBox.setBackground(setColor.BoxColor2());
         monthBox.setForeground(Color.white);
-        monthBox.setPreferredSize(new Dimension(100,50));
+        setSize(monthBox,filter_size_width,filter_size_height);
             
         for (int i = 12; i >= 1; i--) monthBox.addItem(YearMonth.of(y1, i).format(fmt));
 
@@ -117,7 +126,9 @@ public class page3 extends JPanel implements ActionListener{
         resetButton.setFont(new Font(font, Font.BOLD, 16));
         resetButton.setBackground(setColor.BoxColor2());
         resetButton.setForeground(Color.white);
-        resetButton.setPreferredSize(new Dimension(100,50));
+        resetButton.setMinimumSize(new Dimension(125,filter_size_height));
+        resetButton.setPreferredSize(new Dimension(125,filter_size_height));
+        resetButton.setMaximumSize(new Dimension(125,filter_size_height));
 
         filter.add(typeBox);
         filter.add(Box.createHorizontalStrut(15));
@@ -136,11 +147,15 @@ public class page3 extends JPanel implements ActionListener{
         monthBox.addActionListener(this);
     }
 
-    public void TableList(){
-        int table_height = 550;
-        int table_width = 1050;
+    public void setSize(JComboBox<String> cbb, int width,int height) {
+        cbb.setMinimumSize(new Dimension(width,height));
+        cbb.setPreferredSize(new Dimension(width,height));
+        cbb.setMaximumSize(new Dimension(width,height));
+    }
 
-        Table = new table(csv);
+    public void TableList(){
+
+        Table = new table(p1,csv);
         Table.setBackground(setColor.BackgroundColor());
         for(Transaction t : data){
             Table.addRow(t.getId(),t.getname(), t.getDate(), t.getType() == TransactionType.INCOME ? "รายรับ" : "รายจ่าย", t.getCategory(), t.getAmount());

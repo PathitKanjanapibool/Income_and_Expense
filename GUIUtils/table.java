@@ -7,17 +7,19 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import GUI.page1;
 import Income_and_Expense_main.Name;
 
 public class table extends JPanel implements MouseListener {
     
     private DefaultTableModel Table;
     private JTable jt;
-    private String filePath;
+    private final page1 p1;
     private final Name csv;
     private static final String font = "Leelawadee UI";
 
-    public table(Name csv){
+    public table(page1 p1, Name csv){
+        this.p1 = p1;
         this.csv = csv;
         setLayout(new BorderLayout());
         setFont(new Font(font, Font.BOLD, 64));
@@ -62,6 +64,7 @@ public class table extends JPanel implements MouseListener {
         String id = Table.getValueAt(modelRow, 0).toString();
         csv.deleteByIndex(id);
         Table.removeRow(modelRow);
+        p1.refreshSummary();
     }
 
     public void mousePressed(MouseEvent e) {

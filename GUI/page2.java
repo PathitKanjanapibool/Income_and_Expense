@@ -11,7 +11,6 @@ import GUIUtils.setColor;
 import Income_and_Expense_main.category;
 
 public class page2 extends JPanel implements ActionListener{
-    private int money = 0;
     private final page1 p1;
     private final String catpath;
     category cat ;

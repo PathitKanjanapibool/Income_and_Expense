@@ -6,20 +6,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+
 public class categoryColor_read {
     private Map<String, Color> map = new HashMap<>();
     Random rand;
-    private final String filePath;
+    private final String colorpath;
 
-    public categoryColor_read(String filePath){
-        this.filePath = filePath;
+    public categoryColor_read(String colorpath){
+        this.colorpath = colorpath;
         rand = new Random();
         Read();
     }
 
     public void Read (){
 
-        try(BufferedReader br = new BufferedReader(new FileReader(filePath,StandardCharsets.UTF_8))) {
+        try(BufferedReader br = new BufferedReader(new FileReader(colorpath,StandardCharsets.UTF_8))) {
             String s;
             while ((s = br.readLine()) != null) {
                 String[] data = s.split(",");
@@ -37,8 +38,7 @@ public class categoryColor_read {
     
     public void saveToCsv() {
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter(filePath,StandardCharsets.UTF_8,false));
-
+            BufferedWriter bw = new BufferedWriter(new FileWriter(colorpath,StandardCharsets.UTF_8,false));
                 for (Map.Entry<String, Color> e : map.entrySet()) {
                 String name = e.getKey();     // "อาหาร"
                 Color c = e.getValue();       // สีของอาหาร
