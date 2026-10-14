@@ -2,13 +2,13 @@ package GUI;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.text.Utilities;
 
 import GUIUtils.*;
 
 public class App extends JFrame{
 
     private final String filepath;
+    private final String catpath;
     
     public String font = "Leelawadee UI";
     public static final int width = 1440; 
@@ -19,18 +19,21 @@ public class App extends JFrame{
     CardLayout cardLayout;
     JPanel contentArea;  
     setColor setColor;
-    public App(String filepath) {
-
+    public App(String filepath ,String catpath) {
+        page3 p3 = new page3(filepath);
+        page1 p1 = new page1(filepath,catpath,p3);
+        page2 p2 = new page2(p1,catpath);
         this.filepath = filepath;
+        this.catpath = catpath;
 
         Initial();
         cardLayout = new CardLayout();
         contentArea = new JPanel(cardLayout);
         contentArea.setBounds(menu_width, 0, width-menu_width, height);
         contentArea.setOpaque(false);
-        contentArea.add(new page1(filepath), "HOME");
-        contentArea.add(new page2(), "CATEGORY");
-        contentArea.add(new page3(), "LIST");
+        contentArea.add(p1, "HOME");
+        contentArea.add(p2, "CATEGORY");
+        contentArea.add(p3, "LIST");
 
         cp.add(new Menu(cardLayout, contentArea));
         cp.add(contentArea);
