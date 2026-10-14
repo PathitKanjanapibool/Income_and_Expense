@@ -1,4 +1,5 @@
 package GUI;
+import GUIUtils.RoundedBox;
 import GUIUtils.setColor;
 import GUIUtils.table;
 import Income_and_Expense_main.*;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class page3 extends JPanel implements ActionListener{
     private String font = "Leelawadee UI";
@@ -34,17 +36,29 @@ public class page3 extends JPanel implements ActionListener{
     int y1 = LocalDate.now().getYear();
     YearMonth now = YearMonth.now();
 
-    private int table_width = 1050;
-    private int table_height = 550;
-
-    private int filter_size_width = 198; 
-    private int filter_size_height = 50;
-
     int a_height = App.height;
     int a_width = App.width;
 
     int m_height = Menu.height;
     int m_width = Menu.width;
+
+    private JLabel incomeLabel;
+    private JLabel outcomeLabel;
+    private JLabel countLabel;
+
+    private int table_width = 1050;
+    private int table_x = (a_width - m_width)/2 - table_width/2;    // 120
+
+    private int head_y = 30;                                        // y 30-130
+    private int filter_y = 150;                                     // y 150-200
+    private int filter_size_width = 198;
+    private int filter_size_height = 50;
+
+    private int table_y = filter_y + filter_size_height + 15;       // 215
+    private int table_height = 520;                                 // y 215-735
+
+    private int summary_y = table_y + table_height + 40;            // 775
+    private int summary_height = 105;                               // y 755-860
 
     private final page1 p1;
 
@@ -60,23 +74,25 @@ public class page3 extends JPanel implements ActionListener{
         this.setOpaque(false);
         Filter();
         setComponent1();
+        Summary();
         TableList();
     }
     public void setComponent1(){
         JLabel Head = new JLabel("รายการ");
         Head.setFont(new Font(font, Font.BOLD, 64));
         Head.setForeground(Color.white);
-        Head.setBounds(100, 45,600,100);
+        Head.setBounds(100, head_y, 600, 100);
         add(Head);
     }
 
     public void Filter(){
         JPanel filter = new JPanel();
-        filter.setBounds((a_width - m_width)/2 - table_width/2, 175, 1050, 50);
+        filter.setBounds((a_width - m_width)/2 - table_width/2, 150, 1050, 50);
         filter.setBackground(setColor.BackgroundColor());
         filter.setFocusable(false);
         filter.setLayout(new BoxLayout(filter,BoxLayout.X_AXIS));
 
+        //Filter รายรับ-รายจ่าย
         typeBox = new JComboBox<>(new String[]{"ทั้งหมด"});
         typeBox.setFont(new Font(font, Font.BOLD, 16));
         typeBox.setBackground(setColor.BoxColor2());
@@ -86,6 +102,7 @@ public class page3 extends JPanel implements ActionListener{
         typeBox.addItem("รายจ่าย");
         typeBox.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        //Filter หมวดหมู่
         categoryBox = new JComboBox<>(new String[]{"ทุกหมวดหมู่"});
         categoryBox.setFont(new Font(font, Font.BOLD, 16));
         categoryBox.setBackground(setColor.BoxColor2());
@@ -99,13 +116,13 @@ public class page3 extends JPanel implements ActionListener{
             categoryBox.addItem(c);
         }
 
+        //Filter ปี
         yearBox = new JComboBox<>(new String[]{"ทุกปี"});
         yearBox.setFont(new Font(font, Font.BOLD, 16));
         yearBox.setBackground(setColor.BoxColor2());
         yearBox.setForeground(Color.white);
         setSize(yearBox,filter_size_width,filter_size_height);
 
-        
         Set<String> year = new HashSet<>();
         for (Transaction y : data) {
             year.add(Integer.toString(y.getYear()));
@@ -113,7 +130,8 @@ public class page3 extends JPanel implements ActionListener{
         for(String y : year){
             yearBox.addItem(y);
         }
-
+        
+        //Filter เดือน
         monthBox = new JComboBox<>(new String[]{"ทุกเดือน"});
         monthBox.setFont(new Font(font, Font.BOLD, 16));
         monthBox.setBackground(setColor.BoxColor2());
@@ -122,6 +140,7 @@ public class page3 extends JPanel implements ActionListener{
             
         for (int i = 12; i >= 1; i--) monthBox.addItem(YearMonth.of(y1, i).format(fmt));
 
+        //Filter ล้างตัวกรอง
         resetButton = new JButton("ล้างตัวกรอง");
         resetButton.setFont(new Font(font, Font.BOLD, 16));
         resetButton.setBackground(setColor.BoxColor2());
@@ -147,6 +166,54 @@ public class page3 extends JPanel implements ActionListener{
         monthBox.addActionListener(this);
     }
 
+    public void Summary(){
+        JPanel summary = new JPanel(new GridLayout(1, 3, 15, 0));
+        summary.setOpaque(false);
+        summary.setBounds(table_x, summary_y, table_width, summary_height);
+ 
+        incomeLabel  = summaryCard(summary, "รายรับรวม",   setColor.Green());
+        outcomeLabel = summaryCard(summary, "รายจ่ายรวม",  setColor.Red());
+        countLabel   = summaryCard(summary, "จำนวนรายการ", Color.white);
+        add(summary);
+    }
+ 
+    //สร้างกล่องเก็บข้อมูล
+    private JLabel summaryCard(JPanel parent, String title, Color valueColor){
+        RoundedBox card = new RoundedBox(30);
+        card.setBackground(setColor.BoxColor());
+        card.setLayout(new BorderLayout());
+        card.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
+ 
+        JLabel t = new JLabel(title);
+        t.setFont(new Font(font, Font.BOLD, 20));
+        t.setForeground(Color.white);
+ 
+        JLabel v = new JLabel("-");
+        v.setFont(new Font(font, Font.BOLD, 36));
+        v.setForeground(valueColor);
+ 
+        card.add(t, BorderLayout.NORTH);
+        card.add(v, BorderLayout.CENTER);
+        parent.add(card);
+        return v;
+    }
+    //คำนวณยอด รายรับ รายจ่าย จำนวนรายการ
+    public void updateSummary(){
+        if (Table == null || incomeLabel == null) return;
+        DefaultTableModel model = Table.getTableModel();
+        double income = 0, outcome = 0;
+        int rows = model.getRowCount();
+        for (int r = 0; r < rows; r++) {
+            String type = model.getValueAt(r, 3).toString(); //คอลัมน์ "ประเภท"
+            double amount = ((Number) model.getValueAt(r, 5)).doubleValue(); //คอลัมน์ "จำนวนเงิน"
+            if (type.equals("รายรับ")) income += amount;
+            else outcome += amount;
+        }
+        incomeLabel.setText(String.format("฿%,.2f", income));
+        outcomeLabel.setText(String.format("฿%,.2f", outcome));
+        countLabel.setText(String.format("%,d รายการ", rows));
+    }
+
     public void setSize(JComboBox<String> cbb, int width,int height) {
         cbb.setMinimumSize(new Dimension(width,height));
         cbb.setPreferredSize(new Dimension(width,height));
@@ -157,12 +224,14 @@ public class page3 extends JPanel implements ActionListener{
 
         Table = new table(p1,csv);
         Table.setBackground(setColor.BackgroundColor());
+        Table.getTableModel().addTableModelListener(e -> updateSummary());
         for(Transaction t : data){
             Table.addRow(t.getId(),t.getname(), t.getDate(), t.getType() == TransactionType.INCOME ? "รายรับ" : "รายจ่าย", t.getCategory(), t.getAmount());
         }
         Table.setBackground(setColor.BackgroundColor());
-        Table.setBounds((a_width-m_width)/2-(table_width/2), 250, table_width, table_height);
+        Table.setBounds((a_width-m_width)/2-(table_width/2), table_y, table_width, table_height);
         add(Table);
+        updateSummary();
     }
 
     public void loadTable(){    
