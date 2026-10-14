@@ -56,9 +56,10 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
     private Transaction IE_list;
     private Name csv;
     private TransactionType type;
+    private final page3 p3;
 
-    public page1(String filepath) {
-
+    public page1(String filepath, page3 p3) {
+        this.p3 = p3;
         this.filepath = filepath;
 
         this.currentFile = (filepath != null && !filepath.isEmpty()) ? filepath : "data.csv";
@@ -317,6 +318,7 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
                 setComponent3();
                 box3.revalidate();
                 box3.repaint();
+                p3.loadTable();
                 
             };
         }

@@ -19,9 +19,9 @@ public class App extends JFrame{
     JPanel contentArea;  
     setColor setColor;
     public App(String filepath) {
-        page1 p1 = new page1(filepath);
-        page2 p2 = new page2(p1);
         page3 p3 = new page3(filepath);
+        page1 p1 = new page1(filepath,p3);
+        page2 p2 = new page2(p1);
         this.filepath = filepath;
 
         Initial();
