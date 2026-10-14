@@ -14,7 +14,8 @@ import Income_and_Expense_main.category;
 public class page2 extends JPanel implements ActionListener{
     private int money = 0;
     private final page1 p1;
-    category cat = new category("category.csv");
+    private final String catpath;
+    category cat ;
 
     String font = "Leelawadee UI";
 
@@ -26,8 +27,10 @@ public class page2 extends JPanel implements ActionListener{
     RoundedButton deleteCate;
     JTextArea displayCategory;
 
-    public page2(page1 p1){
+    public page2(page1 p1,String catpath){
         this.p1 = p1;
+        this.catpath = catpath;
+        cat = new category(catpath);
         this.setLayout(null);
         this.setOpaque(false);
         setComponent1();
@@ -78,6 +81,8 @@ public class page2 extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == saveCate){
+            if (inputCate.getText().trim().isEmpty()) { return ;
+            }
             cat.saveToCsv(inputCate.getText());
             displayCategory.setText("");
             for(String c : cat.getCategory()){

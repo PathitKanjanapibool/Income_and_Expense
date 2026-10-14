@@ -16,6 +16,7 @@ import javax.swing.border.LineBorder;
 public class page1 extends JPanel implements ActionListener,KeyListener,FocusListener{
 
     private final String filepath;
+    private final String catpath;
 
     private double money;
     private String name;
@@ -58,9 +59,10 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
     private TransactionType type;
     private final page3 p3;
 
-    public page1(String filepath, page3 p3) {
+    public page1(String filepath,String catpath, page3 p3) {
         this.p3 = p3;
         this.filepath = filepath;
+        this.catpath = catpath;
 
         this.currentFile = (filepath != null && !filepath.isEmpty()) ? filepath : "data.csv";
         this.cal = new calculate(currentFile);
@@ -260,7 +262,7 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
 
     void refreshCategory(){
         cbb.removeAllItems();
-        category c = new category("category.csv");
+        category c = new category(catpath);
         for(String s : c.getCategory()){
                 cbb.addItem(s);
             }

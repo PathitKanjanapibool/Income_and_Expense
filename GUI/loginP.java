@@ -114,6 +114,7 @@ public class loginP extends JPanel implements ActionListener{
                 loginService.logIn(acc);
 
                 String userFilePath = makeUserFlie.getUserFileName(acc);
+                String userCAtatPath = makeUserFlie.getUserFileCat(acc);
                 JOptionPane.showMessageDialog(
                     this,
                     "login leaw!",
@@ -121,7 +122,7 @@ public class loginP extends JPanel implements ActionListener{
                     JOptionPane.INFORMATION_MESSAGE
                 );
 
-                new App(userFilePath); 
+                new App(userFilePath,userCAtatPath); 
 
                 Window window = SwingUtilities.getWindowAncestor(this);
                 if (window instanceof JFrame) {
