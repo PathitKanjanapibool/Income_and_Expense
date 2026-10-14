@@ -18,10 +18,10 @@ public class App extends JFrame{
     CardLayout cardLayout;
     JPanel contentArea;  
     setColor setColor;
-    public App(String filepath) {
+    public App(String filepath ,String catpath,String colorpath) {
         page3 p3 = new page3(filepath);
-        page1 p1 = new page1(filepath,p3);
-        page2 p2 = new page2(p1);
+        page1 p1 = new page1(filepath,catpath,colorpath,p3);
+        page2 p2 = new page2(p1,catpath);
         this.filepath = filepath;
 
         Initial();

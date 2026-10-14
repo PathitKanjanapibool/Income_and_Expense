@@ -19,7 +19,7 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
 
     private double money;
     private String name;
-    private categoryColor_read catColor = new categoryColor_read();
+    private categoryColor_read catColor;
     private LocalDate date;
 
 
@@ -58,9 +58,10 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
     private TransactionType type;
     private final page3 p3;
 
-    public page1(String filepath, page3 p3) {
+    public page1(String filepath,String catpath,String colorpath ,page3 p3) {
         this.p3 = p3;
         this.filepath = filepath;
+        catColor = new categoryColor_read(colorpath);
 
         this.currentFile = (filepath != null && !filepath.isEmpty()) ? filepath : "data.csv";
         this.cal = new calculate(currentFile);

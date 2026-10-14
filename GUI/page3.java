@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 
 public class page3 extends JPanel implements ActionListener{
     private String font = "Leelawadee UI";
