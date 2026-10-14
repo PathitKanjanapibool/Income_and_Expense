@@ -52,24 +52,32 @@ public class Userlogin {
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(filePath,true));
             bw.write(id.getUser() + "," + id.getPW());
+            bw.newLine();
             bw.close();
             
         } catch (Exception e) {
             System.out.println(e);
         }
  
-        File file_user = new File (makeUserFlie.getUserFileName(id));
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_user))) {
+        File file_user = new File (makeUserFile.getUserFileName(id));
+        file_user.getParentFile().mkdirs();
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_user,true))) {
     } catch (IOException e) {
         System.out.println(e);
     }       
 
-    File file_cat = new File (makeUserFlie.getUserFileCat(id));
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_cat))) {
+        File file_cat = new File (makeUserFile.getUserFileCat(id));
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_cat,true))) {
     } catch (IOException e) {
         System.out.println(e);
     }
             
+
+    File file_catcolor = new File (makeUserFile.getUserFileCat(id));
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_catcolor,true))) {
+    } catch (IOException e) {
+        System.out.println(e);
+    }
     
    }
 
@@ -91,21 +99,6 @@ public class Userlogin {
         if (!storedPassword.equals(password)) {
             throw new IllegalArgumentException("Password ไม่ถูกต้อง");
         }
-
-        File file_user = new File (makeUserFlie.getUserFileName(id));
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_user))) {
-      
-    } catch (IOException e) {
-        System.out.println(e);
-    }
-        File file_cat = new File (makeUserFlie.getUserFileCat(id));
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_cat))) {
-        
-    } catch (IOException e) {
-        System.out.println(e);
-    }
-        
-
    }
 
 

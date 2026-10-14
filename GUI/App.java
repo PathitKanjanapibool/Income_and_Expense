@@ -2,7 +2,6 @@ package GUI;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.text.Utilities;
 
 import GUIUtils.*;
 
@@ -19,8 +18,13 @@ public class App extends JFrame{
     CardLayout cardLayout;
     JPanel contentArea;  
     setColor setColor;
-    public App(String filepath) {
+    public App(String filepath ,String catpath,String colorpath) {
 
+        page1 p1 = new page1(filepath,catpath,colorpath);
+        page2 p2 = new page2(p1,catpath);
+        page3 p3 = new page3(p1,filepath);
+        p1.setPage3(p3);
+        
         this.filepath = filepath;
 
         Initial();
@@ -28,9 +32,9 @@ public class App extends JFrame{
         contentArea = new JPanel(cardLayout);
         contentArea.setBounds(menu_width, 0, width-menu_width, height);
         contentArea.setOpaque(false);
-        contentArea.add(new page1(filepath), "HOME");
-        contentArea.add(new page2(), "CATEGORY");
-        contentArea.add(new page3(), "LIST");
+        contentArea.add(p1, "HOME");
+        contentArea.add(p2, "CATEGORY");
+        contentArea.add(p3, "LIST");
 
         cp.add(new Menu(cardLayout, contentArea));
         cp.add(contentArea);

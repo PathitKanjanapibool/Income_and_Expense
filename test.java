@@ -88,11 +88,11 @@ public class test {
     private static void TestUserService(){
         System.out.println("---- Test User Service ----");
         UserAcc u1 = new UserAcc("Grape eiei", "g1234");
-        String filename = makeUserFlie.getUserFileName(u1);
+        String filename = makeUserFile.getUserFileName(u1);
         check("filename clean format",filename.equals("data_grape_eiei.csv"));
 
         UserAcc u2 = new UserAcc("    guin    kub    ", "g4321");
-        String filenameSpaces = makeUserFlie.getUserFileName(u2);
+        String filenameSpaces = makeUserFile.getUserFileName(u2);
         check("filename multiple spaces handling", filenameSpaces.equals("data_guin_kub.csv"));
         System.out.println();
     }
@@ -158,9 +158,9 @@ public class test {
 
         UserAcc user1 = new UserAcc("phrom", "phrom123");
         loginService.SignIn(user1);
-        String generatedFile = makeUserFlie.getUserFileName(user1);
+        String generatedFile = makeUserFile.getUserFileName(user1);
         check("SignIn return correct user data filename", generatedFile.equals("data_phrom.csv"));
-        String loggedInFile = makeUserFlie.getUserFileCat(user1);
+        String loggedInFile = makeUserFile.getUserFileCat(user1);
         check("Login succeeds for existing user", loggedInFile.equals("Cat_phrom.csv"));
         
         UserAcc user1NewPw = new UserAcc("phrom", "phrom1234");
