@@ -3,7 +3,21 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
+    // Abstraction Function (AF):
+    //   AF(id, name, date, type, category, amount) = 
+    //   รายการธุรกรรมทางการเงิน (รายรับหรือรายจ่าย) ของชิ้นหนึ่ง โดยมีรหัส ID เป็นตัวระบุตัวตน, 
+    //   ชื่อรายการ name, เกิดขึ้นในวันที่ date, เป็นประเภท type (INCOME/OUTCOME), 
+    //   จัดอยู่ในหมวดหมู่ category, และมีมูลค่าเป็นจำนวนเงิน amount
+    //
+    // Representation Invariant (RI):
+    //   - id ต้องไม่เป็น null และไม่ใช่สตริงว่าง
+    //   - name ต้องไม่เป็น null
+    //   - date ต้องไม่เป็น null
+    //   - type ต้องไม่เป็น null (ต้องเป็น INCOME หรือ OUTCOME เท่านั้น)
+    //   - category ต้องไม่เป็น null และไม่ใช่สตริงว่าง
+    //   - amount ต้องมีค่ามากกว่าหรือเท่ากับ 0 (amount >= 0)
 public class Transaction {
+
     private String id;
     private String name;
     private LocalDate date;
@@ -12,8 +26,25 @@ public class Transaction {
     private double amount;
     private double total_amount;
 
+    private void checkrep(){
+        assert id != null && !id.trim().isEmpty(): "ID ต้องมีค่า";
+        assert name != null : "name ต้องไม่เป็น null";
+        assert date != null : "date ต้องไม่เป็น null";
+        assert type != null : "type ต้องไม่เป็น null";
+        assert category != null && !category.trim().isEmpty() : "category มีค่า";
+        assert amount >= 0 : "เงินต้องไม่ติดลบ";
+    }
+
     // Constructor สำหรับสร้างรายการใหม่
     public Transaction(String name, LocalDate date, TransactionType type, String category, double amount) {
+
+        if (name == null || date == null || type == null || category == null) {
+            throw new IllegalArgumentException("ต้องมีข้อมูล");
+        }
+        if (amount < 0) {
+            throw new IllegalArgumentException("เงินต้องไม่ติดลบ");
+        }
+
         this.id = UUID.randomUUID().toString();
         this.name = name; //ชื่อรายการ
         this.date = date;
@@ -21,9 +52,18 @@ public class Transaction {
         this.category = category;
         this.amount = amount;
 
+        checkrep();
     }
 
     public Transaction(String id, String name, LocalDate date, TransactionType type, String category, double amount) {
+
+        if (id == null || name == null || date == null || type == null || category == null) {
+            throw new IllegalArgumentException("ไม่มีข้อมูล");
+        }
+        if (amount < 0) {
+            throw new IllegalArgumentException("เงินต้องไม่เป็นลบ");
+        }
+
         this.id = id;
         this.name = name; //ชื่อรายการ
         this.date = date;
@@ -31,6 +71,7 @@ public class Transaction {
         this.category = category;
         this.amount = amount;
 
+        checkrep();
     }
 
     // Getters

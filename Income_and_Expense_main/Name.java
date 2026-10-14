@@ -13,10 +13,16 @@ public class Name {
     private final String filePath;
 
     public Name(String filePath) {
+        if (filePath == null) {
+            throw new IllegalArgumentException("ไม่มีที่อยู่ไฟล์");
+        }
         this.filePath = filePath;
     }
 
    public void saveToCsv(Transaction transactions) {
+        if (transactions == null) {
+            throw new IllegalArgumentException("transaction เป็น null");
+        }
         try {
             BufferedWriter bw = new BufferedWriter(new FileWriter(filePath,true));
             String line = String.join(",",
@@ -90,7 +96,7 @@ public class Name {
             System.err.println("อ่านไฟล์ไม่สำเร็จ: " + e.getMessage());
         }
 
-        return map;
+        return new HashMap<>(map); //คืน new Hashmap เป็น defensive copy
     }
 
     public void saveMapToCsv( Map<String, Transaction> map) {
@@ -110,8 +116,8 @@ public class Name {
     public void editCsv( String targetId, Transaction transaction) {
         // Step 1: โหลด CSV เข้า HashMap
         Map<String, Transaction> map = loadToMap(filePath);
-        System.out.println("targetId ที่ค้นหา: [" + targetId + "]");
-        System.out.println("keys ที่มีอยู่ใน map: " + map.keySet());
+        // System.out.println("targetId ที่ค้นหา: [" + targetId + "]");
+        // System.out.println("keys ที่มีอยู่ใน map: " + map.keySet());
         // Step 2: เช็กว่ามี ID นี้ใน Map ไหม ถ้ามีให้ Put ค่าใหม่เข้าไปทับ Key เดิม
         if (!map.containsKey(targetId)) {
             throw new IllegalArgumentException("not found ID");
