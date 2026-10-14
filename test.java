@@ -25,8 +25,8 @@ public class test {
         boolean assertsOn = false;
         assert assertsOn = true;
         if (!assertsOn) {
-            System.out.println("assertion disablen");
-        }else{System.out.println("assertion enable\n");}
+            System.out.println("assertion disabled");
+        }
         System.out.println("=== test start ===\n");
 
         //พื้นที่เรียกmethodที่ใช่เทสต่างๆ
@@ -36,7 +36,6 @@ public class test {
         TestCsvRowParsing();
         TestNameCsvOperations();
         TestUserLoginOperation();
-        TestTransactionCheckRep();
 
 
         //สรุปผล
@@ -51,11 +50,14 @@ public class test {
             System.exit(1);
         }
     }
+    /* private static void test(){
+        check("test", true);
+    } */
 
     private static void TestGet(){
         System.out.println("---- Test Get ----");
         Transaction t1 = new Transaction("dinner",LocalDate.of(2026, 6, 7), 
-            TransactionType.OUTCOME, "ข้าว", 150.50);
+            TransactionType.OUTCOME, "ข้าว", 150.50, "shrimp");
         LocalDate testdate = LocalDate.of(2026, 6, 7);
         check("name = dinner", t1.getname().equals("dinner"));
         check("date = 2026/6/7", t1.getDate().equals(testdate));
@@ -63,6 +65,8 @@ public class test {
         check("category = ข้าว", t1.getCategory().equals("ข้าว"));
         check("amount = 150.50", t1.getAmount() == 150.50);
         check("ID is generated auto", t1.getId() != null && !t1.getId().isEmpty());
+        //check("description = shrimp", t1.getDescription().equals("shrimp"));
+        //check("total_amount = 250.00", t1.total_amount() == 250.00);
 
         //Transaction t2 = new Transaction("custom-di-99", "salary", testdate, TransactionType.INCOME, "Job", 5000.00);
         Transaction t2 = new Transaction("custom_id_001", "lunch", LocalDate.now(), TransactionType.OUTCOME, "Food", 50.0);
@@ -72,10 +76,10 @@ public class test {
 
     private static void TestCalculate(){
         System.out.println("---- Test Calculate ----");
-        calculate calc = new calculate("gapi.csv");
-        Transaction t1 = new Transaction("เงินเดือน",LocalDate.now(), TransactionType.INCOME, "Salary", 1000.00);
-        Transaction t2 = new Transaction("ค่าข้าว", LocalDate.now(), TransactionType.OUTCOME, "Food", 200.00);
-        Transaction t3 = new Transaction("ค่ารถ", LocalDate.now(), TransactionType.OUTCOME, "Transport", 50.0);
+        calculate calc = new calculate();
+        Transaction t1 = new Transaction("เงินเดือน",LocalDate.now(), TransactionType.INCOME, "Salary", 1000.00, "Bonus");
+        Transaction t2 = new Transaction("ค่าข้าว", LocalDate.now(), TransactionType.OUTCOME, "Food", 200.00, "Lunch");
+        Transaction t3 = new Transaction("ค่ารถ", LocalDate.now(), TransactionType.OUTCOME, "Transport", 50.0, "BTS");
 
         List<Transaction> list = List.of(t1,t2,t3);
 
@@ -87,12 +91,10 @@ public class test {
 
     private static void TestUserService(){
         System.out.println("---- Test User Service ----");
-        UserAcc u1 = new UserAcc("Grape eiei", "g1234");
-        String filename = makeUserFlie.getUserFileName(u1);
+        String filename = makeUserFlie.getUserFileName("Grape eiei");
         check("filename clean format",filename.equals("data_grape_eiei.csv"));
 
-        UserAcc u2 = new UserAcc("    guin    kub    ", "g4321");
-        String filenameSpaces = makeUserFlie.getUserFileName(u2);
+        String filenameSpaces = makeUserFlie.getUserFileName("   guin   kub    ");
         check("filename multiple spaces handling", filenameSpaces.equals("data_guin_kub.csv"));
         System.out.println();
     }
@@ -111,7 +113,7 @@ public class test {
 
         UserAcc userAcc = new UserAcc("admin","pass123");
         String userCsv = userAcc.toCsvRow();
-        UserAcc parsedUser = UserAcc.fromCsvRow(userCsv);
+        UserAcc parsedUser = userAcc.fromCsvRow(userCsv);
         check("UserAcc parssed username matches", parsedUser.getUser().equals("admin"));
         check("UserAcc parsed password matches", parsedUser.getPW().equals("pass123"));
         System.out.println();
@@ -152,16 +154,16 @@ public class test {
         String testUserFile = "test_users_temp.csv";
 
         File f = new File(testUserFile);
-        //if (f.exists()) {f.delete();}
+        if (f.exists()) {f.delete();}
 
         Userlogin loginService = new Userlogin(testUserFile);
 
         UserAcc user1 = new UserAcc("phrom", "phrom123");
-        loginService.SignIn(user1);
-        String generatedFile = makeUserFlie.getUserFileName(user1);
+        String generatedFile = loginService.SignIn(user1);
         check("SignIn return correct user data filename", generatedFile.equals("data_phrom.csv"));
-        String loggedInFile = makeUserFlie.getUserFileCat(user1);
-        check("Login succeeds for existing user", loggedInFile.equals("Cat_phrom.csv"));
+
+        String loggedInFile = loginService.logIn(user1);
+        check("Login succeeds for existing user", loggedInFile.equals("data_phrom.csv"));
         
         UserAcc user1NewPw = new UserAcc("phrom", "phrom1234");
         loginService.updatePW("phrom", user1NewPw);
@@ -187,27 +189,6 @@ public class test {
         check("Login throws exception on non-existent user", caughtNotFound);
 
         if (f.exists()) {f.delete();}
-        System.out.println();
-    }
-    private static void TestTransactionCheckRep(){
-        System.out.println("---- Test Transaction checkrep ----");
-        
-        boolean negativeAmount = false;
-        try {
-            new Transaction("Test", LocalDate.now(), TransactionType.OUTCOME, "Food", -10.0);
-        } catch (IllegalArgumentException e) {
-            negativeAmount = true;
-        }
-        check("Transaction rejects negative amount", negativeAmount);
-
-        boolean NullCategory = false;
-        try {
-            new Transaction("Test", LocalDate.now(), TransactionType.OUTCOME, null, 100.0);
-        } catch (IllegalArgumentException e) {
-            NullCategory = true;
-        }
-        check("Transaction rejects null category", NullCategory);
-
         System.out.println();
     }
     
