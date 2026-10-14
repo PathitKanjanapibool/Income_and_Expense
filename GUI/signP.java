@@ -4,10 +4,12 @@ import java.awt.*;
 import javax.swing.*;
 
 import GUIUtils.RoundedButton;
+import Income_and_Expense_main.UserAcc;
+import Income_and_Expense_main.Userlogin;
 
 import java.awt.event.*;
 
-public class signP extends JPanel{
+public class signP extends JPanel implements ActionListener{
     String font = "Leelawadee UI";
     JTextField uSernmaetfsign;
     JPasswordField passWordFsign;
@@ -93,6 +95,9 @@ public class signP extends JPanel{
         loginButton2.setFont(new Font(font, Font.BOLD, 24));
         loginButton2.setBounds(530, 600, 250, 40);
         add(loginButton2);
+        
+        //Add actionlistener ให้ปุ่ม SignUp
+        SignButton2.addActionListener(this);
 
         loginButton2.addActionListener(new ActionListener() {
             @Override
@@ -103,5 +108,78 @@ public class signP extends JPanel{
                 contentArea.repaint();
             }
         });
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // เมื่อกดปุ่ม Sign up
+    if (e.getSource() == SignButton2) { // เปลี่ยน SignButton2 เป็นชื่อตัวแปรปุ่ม Sign up ของคุณ
+        String username = uSernmaetfsign.getText().trim();
+        String password = new String(passWordFsign.getPassword()).trim();
+        String confirmPassword = new String(conFirmpassfield.getPassword()).trim();
+
+        // เช็กการกรอกข้อมูลช่องว่าง
+        if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                this,
+                "กรุณากรอกข้อมูลให้ครบทุกช่อง",
+                "แจ้งเตือน",
+                JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        // เช็ก Password และ Confirm Password 
+        if (!password.equals(confirmPassword)) {
+            JOptionPane.showMessageDialog(
+                this,
+                "รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน",
+                "ข้อผิดพลาด",
+                JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+
+        try {
+            UserAcc acc = new UserAcc(username, password);
+            Userlogin loginService = new Userlogin("data.csv");
+
+            //เรียก SignIn จาก Userlogin.java เพื่อบันทึกข้อมูลและสร้างไฟล์ประจำตัว
+            loginService.SignIn(acc);
+
+            JOptionPane.showMessageDialog(
+                this,
+                "สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ",
+                "สำเร็จ",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+
+            //ล้างค่าใน Text Fields
+            uSernmaetfsign.setText("");
+            passWordFsign.setText("");
+            conFirmpassfield.setText("");
+
+            //กลับหน้า login
+            cardLayout.show(contentArea, "loginPage");
+            contentArea.revalidate();
+            contentArea.repaint();
+
+        } catch (IllegalArgumentException ex) {
+            // ดักจับข้อความ Error จาก SignIn() เช่น "มีuserอยู่แล้ว โปรดlogin" หรือ "มีเครื่องหมาย ,"
+            JOptionPane.showMessageDialog(
+                this,
+                ex.getMessage(),
+                "สมัครสมาชิกไม่สำเร็จ",
+                JOptionPane.ERROR_MESSAGE
+            );
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(
+                this,
+                "เกิดข้อผิดพลาดในระบบ: " + ex.getMessage(),
+                "ข้อผิดพลาด",
+                JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
     }
 }
