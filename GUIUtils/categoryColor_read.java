@@ -1,7 +1,6 @@
 package GUIUtils;
 import java.awt.Color;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -17,7 +16,7 @@ public class categoryColor_read {
 
     public void Read (){
 
-        try(BufferedReader br = new BufferedReader(new FileReader("categoryColor.csv",StandardCharsets.UTF_8))) {
+        try(BufferedReader br = new BufferedReader(new FileReader("categoryColor.csv"))) {
             String s;
             while ((s = br.readLine()) != null) {
                 String[] data = s.split(",");
@@ -35,7 +34,7 @@ public class categoryColor_read {
     
     public void saveToCsv() {
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter("categoryColor.csv",StandardCharsets.UTF_8,false));
+            BufferedWriter bw = new BufferedWriter(new FileWriter("categoryColor.csv",false));
 
                 for (Map.Entry<String, Color> e : map.entrySet()) {
                 String name = e.getKey();     // "อาหาร"
