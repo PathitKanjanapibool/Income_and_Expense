@@ -420,4 +420,5 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
     public void focusLost(FocusEvent e) {
         if(tf2.getText().isEmpty()) tf2.setText(LocalDate.now().format(f));
     }
+>>>>>>> main
 }
