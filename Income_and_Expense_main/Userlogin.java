@@ -59,20 +59,25 @@ public class Userlogin {
             System.out.println(e);
         }
  
-        File file_user = new File (makeUserFlie.getUserFileName(id));
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_user,true))) {
-            
+        File file_user = new File (makeUserFile.getUserFileName(id));
+        file_user.getParentFile().mkdirs();
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_user))) {
     } catch (IOException e) {
         System.out.println(e);
     }       
 
-    File file_cat = new File(makeUserFlie.getUserFileCat(id));
-try {
-    file_cat.createNewFile();   // ไม่ทำอะไรถ้ามีอยู่แล้ว
-} catch (IOException e) {
-    System.out.println(e);
-}
+        File file_cat = new File (makeUserFile.getUserFileCat(id));
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_cat))) {
+    } catch (IOException e) {
+        System.out.println(e);
+    }
             
+
+    File file_catcolor = new File (makeUserFile.getUserFileCat(id));
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_catcolor))) {
+    } catch (IOException e) {
+        System.out.println(e);
+    }
     
    }
 
@@ -95,19 +100,24 @@ try {
             throw new IllegalArgumentException("Password ไม่ถูกต้อง");
         }
 
-        File file_user = new File (makeUserFlie.getUserFileName(id));
-        try {
-    file_user.createNewFile();   // ไม่ทำอะไรถ้ามีอยู่แล้ว
-} catch (IOException e) {
-    System.out.println(e);
-}
-        File file_cat = new File(makeUserFlie.getUserFileCat(id));
-try {
-    file_cat.createNewFile();   // ไม่ทำอะไรถ้ามีอยู่แล้ว
-} catch (IOException e) {
-    System.out.println(e);
-}
+        File file_user = new File (makeUserFile.getUserFileName(id));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_user))) {
+      
+    } catch (IOException e) {
+        System.out.println(e);
+    }
+        File file_cat = new File (makeUserFile.getUserFileCat(id));
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_cat))) {
         
+    } catch (IOException e) {
+        System.out.println(e);
+    }
+    
+    File file_catcolor = new File (makeUserFile.getUserFileCat(id));
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(file_catcolor))) {
+    } catch (IOException e) {
+        System.out.println(e);
+    }
 
    }
 
