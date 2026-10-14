@@ -52,7 +52,11 @@ public class table extends JPanel implements MouseListener {
     }
     public void clearRows(){
     Table.setRowCount(0);
-}
+    }
+
+    public DefaultTableModel getTableModel(){
+    return Table;
+    }
 
     public void mouseClicked(MouseEvent e) {
         int viewRow = jt.rowAtPoint(e.getPoint());
