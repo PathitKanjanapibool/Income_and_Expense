@@ -13,11 +13,10 @@ import Income_and_Expense_main.category;
 
 public class page2 extends JPanel implements ActionListener{
     private int money = 0;
+    private final page1 p1;
     category cat = new category("category.csv");
 
     String font = "Leelawadee UI";
-
-    table list = new table();
 
     RoundedToggleButton button1; 
     RoundedToggleButton button2;
@@ -27,12 +26,13 @@ public class page2 extends JPanel implements ActionListener{
     RoundedButton deleteCate;
     JTextArea displayCategory;
 
-    public page2(){
+    public page2(page1 p1){
+        this.p1 = p1;
         this.setLayout(null);
         this.setOpaque(false);
         setComponent1();
     }
-    public void setComponent1(){
+    private void setComponent1(){
         JLabel Head = new JLabel("หมวดหมู่");
         Head.setFont(new Font(font, Font.BOLD, 64));
         Head.setForeground(Color.white);
@@ -84,6 +84,7 @@ public class page2 extends JPanel implements ActionListener{
                 displayCategory.append(c);
                 displayCategory.append("\n");
             }
+            p1.refreshCategory();
         }
 
         if(e.getSource() == deleteCate){
@@ -94,6 +95,7 @@ public class page2 extends JPanel implements ActionListener{
                 displayCategory.append(c);
                 displayCategory.append("\n");
             }
+            p1.refreshCategory();
         }
     }
 }
