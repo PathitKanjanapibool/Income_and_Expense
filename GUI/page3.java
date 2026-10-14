@@ -14,14 +14,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class page3 extends JPanel implements ActionListener{
     private String font = "Leelawadee UI";
     private table Table;
-    private Name csv = new Name("data.csv");
-    private List<Transaction> data = new ArrayList<>(csv.loadToMap("data.csv").values());
-    private int count = csv.loadToMap("data.csv").size();
-    private List<Transaction> category_list;
+    private final Name csv;
+    private final String filepath;
+    private final List<Transaction> data;
+
     Locale th = Locale.forLanguageTag("th");
     DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMMM", th);
 
@@ -41,7 +42,12 @@ public class page3 extends JPanel implements ActionListener{
     int m_width = Menu.width;
 
 
-    public page3(){
+    public page3(String filepath){
+        this.filepath = filepath;
+        csv = new Name(filepath);
+        data = new ArrayList<>(csv.loadToMap(filepath).values());
+
+
         this.setLayout(null);
         this.setOpaque(false);
         Filter();
@@ -78,7 +84,7 @@ public class page3 extends JPanel implements ActionListener{
         categoryBox.setForeground(Color.white);
         categoryBox.setPreferredSize(new Dimension(100,50));
         Set<String> category= new HashSet<>();
-        for (Transaction c : getCategory_List()) {
+        for (Transaction c : data) {
             category.add(c.getCategory());
         }
         for(String c : category){
@@ -93,7 +99,7 @@ public class page3 extends JPanel implements ActionListener{
 
         
         Set<String> year = new HashSet<>();
-        for (Transaction y : getCategory_List()) {
+        for (Transaction y : data) {
             year.add(Integer.toString(y.getYear()));
         }
         for(String y : year){
@@ -135,18 +141,14 @@ public class page3 extends JPanel implements ActionListener{
         int table_height = 550;
         int table_width = 1050;
 
-        Table = new table();
+        Table = new table(csv);
         Table.setBackground(setColor.BackgroundColor());
-        for(Transaction t : getCategory_List()){
-            Table.addRow(t.getname(), t.getDate(), t.getType() == TransactionType.INCOME ? "รายรับ" : "รายจ่าย", t.getCategory(), t.getAmount());
+        for(Transaction t : data){
+            Table.addRow(t.getId(),t.getname(), t.getDate(), t.getType() == TransactionType.INCOME ? "รายรับ" : "รายจ่าย", t.getCategory(), t.getAmount());
         }
         Table.setBackground(setColor.BackgroundColor());
         Table.setBounds((a_width-m_width)/2-(table_width/2), 250, table_width, table_height);
         add(Table);
-        //System.out.println(getWidth());
-    }
-    private List<Transaction> getCategory_List(){
-        return category_list = new ArrayList<>(csv.loadToMap("data.csv").values());
     }
 
     public void loadTable(){    
@@ -173,8 +175,8 @@ public class page3 extends JPanel implements ActionListener{
     }
 
     Table.clearRows();
-    for (Transaction t : csv.filter("data.csv", year, month, category, type)) {
-        Table.addRow(t.getname(), t.getDate(), t.getType() == TransactionType.INCOME ? "รายรับ" : "รายจ่าย", t.getCategory(), t.getAmount());
+    for (Transaction t : csv.filter(filepath, year, month, category, type)) {
+        Table.addRow(t.getId(),t.getname(), t.getDate(), t.getType() == TransactionType.INCOME ? "รายรับ" : "รายจ่าย", t.getCategory(), t.getAmount());
     }
 }
 
