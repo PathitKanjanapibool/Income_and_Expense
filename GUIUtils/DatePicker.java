@@ -1,12 +1,18 @@
 package GUIUtils;
 import java.awt.*;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+
 import javax.swing.*;
 import java.text.SimpleDateFormat;
 
 public class DatePicker {
-    private int month = Calendar.getInstance().get(Calendar.MONTH);
-    private int year = Calendar.getInstance().get(Calendar.YEAR);
+    // private int month = Calendar.getInstance().get(Calendar.MONTH);
+    // private int year = Calendar.getInstance().get(Calendar.YEAR);
+    private Calendar baseCal = new GregorianCalendar(Locale.US);
+    private int month = baseCal.get(Calendar.MONTH);
+    private int year = baseCal.get(Calendar.YEAR);
     private JLabel monthYearLabel = new JLabel("", JLabel.CENTER);
     private String day = "";
     private JDialog dialog;
@@ -71,7 +77,7 @@ public class DatePicker {
             buttons[i].setText("");
         }
         
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = new GregorianCalendar(Locale.US);
         cal.set(year, month, 1);
         
         int firstDayOfWeek = cal.get(Calendar.DAY_OF_WEEK); 
@@ -93,9 +99,9 @@ public class DatePicker {
     // Method ส่งคืนวันที่ในรูปแบบ yyyy-MM-dd
     public String getFormattedDate() {
         if (day.equals("")) return "";
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(java.util.Locale.US);
         cal.set(year, month, Integer.parseInt(day));
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", java.util.Locale.US);
         return sdf.format(cal.getTime());
     }
 }
