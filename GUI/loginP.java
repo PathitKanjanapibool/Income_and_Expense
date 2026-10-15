@@ -118,7 +118,7 @@ public class loginP extends JPanel implements ActionListener{
                 String colorpath = makeUserFile.getUserFileCatColor(acc);
                 JOptionPane.showMessageDialog(
                     this,
-                    "login Success!",
+                    "login leaw!",
                     "sum reid",
                     JOptionPane.INFORMATION_MESSAGE
                 );
