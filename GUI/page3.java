@@ -23,6 +23,7 @@ public class page3 extends JPanel implements ActionListener{
     private final Name csv;
     private final String filepath;
     private final List<Transaction> data;
+    private Set<String> category= new HashSet<>();
 
     Locale th = Locale.forLanguageTag("th");
     DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMMM", th);
@@ -108,7 +109,8 @@ public class page3 extends JPanel implements ActionListener{
         categoryBox.setBackground(setColor.BoxColor2());
         categoryBox.setForeground(Color.white);
         setSize(categoryBox,filter_size_width,filter_size_height);
-        Set<String> category= new HashSet<>();
+        //Set<String> category= new HashSet<>();
+        
         for (Transaction c : data) {
             category.add(c.getCategory());
         }
@@ -274,8 +276,22 @@ public class page3 extends JPanel implements ActionListener{
         }
 
         if(e.getSource() == resetButton){
+            data.clear();
+            data.addAll(csv.loadToMap(filepath).values());
             typeBox.setSelectedIndex(0);
             categoryBox.setSelectedIndex(0);
+            //Set<String> category= new HashSet<>();
+            categoryBox.removeAllItems();
+            categoryBox.addItem("ทุกหมวดหมู่");
+            category.clear();
+        for (Transaction c : data) {
+            if (c.getCategory() != null && !c.getCategory().isEmpty()) {
+            category.add(c.getCategory());
+        }
+        }
+        for(String c : category){
+            categoryBox.addItem(c);
+        }
             yearBox.setSelectedIndex(0);
             monthBox.setSelectedIndex(0);
         }

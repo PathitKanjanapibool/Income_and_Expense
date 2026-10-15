@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -25,7 +26,7 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
     private LocalDate date;
 
 
-    private static final DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yyyy",Locale.US);
     private static final String font = "Leelawadee UI";
 
 
