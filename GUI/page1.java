@@ -16,10 +16,12 @@ import javax.swing.border.LineBorder;
 public class page1 extends JPanel implements ActionListener,KeyListener,FocusListener{
 
     private final String filepath;
+    private final String catpath;
+    private final String colorpath;
 
     private double money;
     private String name;
-    private categoryColor_read catColor = new categoryColor_read();
+    private categoryColor_read catColor;
     private LocalDate date;
 
 
@@ -56,15 +58,18 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
     private Transaction IE_list;
     private Name csv;
     private TransactionType type;
-    private final page3 p3;
+    private page3 p3;
 
-    public page1(String filepath, page3 p3) {
+    public page1(String filepath,String catpath,String colorpath) {
         this.p3 = p3;
         this.filepath = filepath;
+        this.catpath = catpath;
+        this.colorpath = colorpath;
+        catColor = new categoryColor_read(colorpath);
 
-        this.currentFile = (filepath != null && !filepath.isEmpty()) ? filepath : "data.csv";
-        this.cal = new calculate(currentFile);
-        this.csv = new Name(currentFile);
+        currentFile = filepath;
+        cal = new calculate(currentFile);
+        csv = new Name(currentFile);
 
         money_cal();
         setLayout(null);
@@ -117,8 +122,6 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
     }
     //องค์ประกอบภายในกล่องฝั่งซ้าย
     private void setComponent2(){
-
-        
 
         //ปุ่มรายสลับรับ
         button1 = new RoundedToggleButton(75);
@@ -260,7 +263,7 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
 
     void refreshCategory(){
         cbb.removeAllItems();
-        category c = new category("category.csv");
+        category c = new category(catpath);
         for(String s : c.getCategory()){
                 cbb.addItem(s);
             }
@@ -311,15 +314,8 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
                 csv.saveToCsv(IE_list);
                 tf1.setText("");
                 tf3.setText("");
-                money_cal();
-                Money_left.setText(String.format("฿%,.2f", money));
-                box1.repaint();
-                box3.removeAll();     
-                setComponent3();
-                box3.revalidate();
-                box3.repaint();
-                p3.loadTable();
-                
+                refreshSummary();
+                if (p3 != null) p3.loadTable();
             };
         }
 
@@ -358,6 +354,19 @@ public class page1 extends JPanel implements ActionListener,KeyListener,FocusLis
 
         return Conditions;
 }
+
+    public void refreshSummary() {
+    money_cal();
+    Money_left.setText(String.format("฿%,.2f", money));
+    box3.removeAll();
+    setComponent3();
+    box3.revalidate();
+    box3.repaint();
+    }
+
+    public void setPage3(page3 p3) {
+    this.p3 = p3;
+    }
 
     private void money_cal(){
         money_remain = new ArrayList<>(csv.loadToMap(filepath).values());

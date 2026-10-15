@@ -40,7 +40,6 @@ public class logsign extends JFrame {
     }
 
     public void Finally(){
-        this.setTitle("Income & Expense App");
         this.setSize(width, height);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
