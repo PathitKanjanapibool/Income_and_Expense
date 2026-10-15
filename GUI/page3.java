@@ -24,6 +24,7 @@ public class page3 extends JPanel implements ActionListener{
     private final String filepath;
     private final List<Transaction> data;
     private Set<String> category= new HashSet<>();
+    private Set<String> year = new HashSet<>();
 
     Locale th = Locale.forLanguageTag("th");
     DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMMM", th);
@@ -125,7 +126,7 @@ public class page3 extends JPanel implements ActionListener{
         yearBox.setForeground(Color.white);
         setSize(yearBox,filter_size_width,filter_size_height);
 
-        Set<String> year = new HashSet<>();
+        //Set<String> year = new HashSet<>();
         for (Transaction y : data) {
             year.add(Integer.toString(y.getYear()));
         }
@@ -267,18 +268,28 @@ public class page3 extends JPanel implements ActionListener{
 
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == yearBox){
+            if (yearBox.getSelectedItem() != null) {
             monthBox.removeAllItems();
             monthBox.addItem("ทุกเดือน");
             int last = yearBox.getSelectedItem().equals(y1+"") ? now.getMonthValue() : 12;
             for (int i = last; i >= 1; i--) 
-                monthBox.addItem(YearMonth.of(y1, i).format(fmt));
+                monthBox.addItem(YearMonth.of(y1, i).format(fmt));    
+            }
+            
             
         }
 
         if(e.getSource() == resetButton){
+            yearBox.removeActionListener(this);
+            categoryBox.removeActionListener(this);
+            monthBox.removeActionListener(this);
+            typeBox.removeActionListener(this);
+
+            monthBox.setSelectedIndex(0);
+            typeBox.setSelectedIndex(0);
+
             data.clear();
             data.addAll(csv.loadToMap(filepath).values());
-            typeBox.setSelectedIndex(0);
             categoryBox.setSelectedIndex(0);
             //Set<String> category= new HashSet<>();
             categoryBox.removeAllItems();
@@ -287,13 +298,37 @@ public class page3 extends JPanel implements ActionListener{
         for (Transaction c : data) {
             if (c.getCategory() != null && !c.getCategory().isEmpty()) {
             category.add(c.getCategory());
-        }
+            }
         }
         for(String c : category){
             categoryBox.addItem(c);
         }
-            yearBox.setSelectedIndex(0);
-            monthBox.setSelectedIndex(0);
+        categoryBox.setSelectedIndex(0);
+
+        yearBox.removeAllItems();
+        yearBox.addItem("ทุกปี");
+        year.clear();
+        Set<String> yearSet = new HashSet<>();
+        for (Transaction y : data) {
+        yearSet.add(Integer.toString(y.getYear()));
+        }
+        for (String y : yearSet) {
+            yearBox.addItem(y);
+        }
+        yearBox.setSelectedIndex(0);
+
+        monthBox.removeAllItems();
+        monthBox.addItem("ทุกเดือน");
+        for (int i = 12; i >= 1; i--) {
+            monthBox.addItem(YearMonth.of(y1, i).format(fmt));
+        }
+        monthBox.setSelectedIndex(0);
+
+        yearBox.addActionListener(this);
+        categoryBox.addActionListener(this);
+        monthBox.addActionListener(this);
+        typeBox.addActionListener(this);
+            
         }
         loadTable();
     }
